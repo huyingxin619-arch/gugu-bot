@@ -1,0 +1,9 @@
+{
+  "lastChecks": {
+    "git_backup": 1782210522873
+  },
+  "repo": "https://github.com/huyingxin619-arch/gugu-bot.git",
+  "auto_backup_enabled": true,
+  "backup_schedule": "每 6 小时",
+  "backup_cron_id": "683a3141-14d0-4bac-9973-f7fd90fb120f"
+}
