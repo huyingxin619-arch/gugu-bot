@@ -40,6 +40,21 @@
 
 ---
 
+## 🖥️ macmini 上的 OpenClaw 实例
+
+本机运行 **2 个独立的 OpenClaw 实例**：
+
+| 实例 | 端口 | HOME 目录 | 用途 | 默认模型 |
+|------|------|-----------|------|----------|
+| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理 | kimi-k2.6 |
+| **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（拉取 ADM/TVM/M+ 数据）| claude-sonnet-4-6 → 已切换 |
+
+- **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
+- **adm 核心能力：** 按指令通过 API 拉取广告监测数据
+- **常见问题：** MLAMP token 配额不足导致 403 报错（已记录根因）<来源: #2026-06-25>
+
+---
+
 ## ⏰ 定时任务
 
 - **每日11点项目进展汇报**（工作日）：主动找小胡汇报各项目进展、追问待收文档、跟进 TODO
@@ -48,22 +63,14 @@
 
 ---
 
-## 🗂️ 专项文件索引
+## 🗂️ 项目索引
 
-- **KA品牌安全项目** → `ka-brand-safety.md`（PO已下单，执行阶段，研发4/27起开发采集程序）
-- **Prebid MAC黑名单升级** → `projects/prebid-mac-blacklist.md`（方法论成型，待分析MAC vs IEEE重合度）
-- **秒针产品图谱** → `miaozhen-products.md`（各产品定位、小胡负责范围、产品协作关系）
-- **Admonitor 计算链路** → `knowledge/admonitor-arch.md`（产品基础知识：ETL/DM/DR、Gross/Net/Total Net，非项目）
-- **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`（拉数流程、Token获取、确认清单、已知踩坑）
-- **智屏视界视频像素验证** → `projects/zpsj-video-verification.md`（HSV+哈希方案，对接中，5月底deadline）
-- **蚂蚁IVT合作研究** → `projects/ant-ivt-research.md`（15包分析完成，PPT已出，score1=0异常排查中）
-- **ADM龙虾看板** → `projects/admonitor-bot-dashboard.md`（已部署内网，基本告一段落）
-- **OTT实验室升级** → `projects/ott-lab-upgrade.md`（卡在场地问题，有多个潜在需求方挂着）
-- **CBP升级** → `projects/cbp-upgrade.md`（调研报告已出，待开发排期）
-- **布点项目** → `projects/admonitor-budian.md`（待业务确认#23影响范围，5月中旬预期上线）
-- **三九×龙虾Agent项目** → `projects/sanjiuagent.md`（报价已发，等待中，客户续约7月，届时一起决策）
-- **TAG审计** → `projects/tag-audit.md`（测试全通过，信通院出报告中，基本收官）
-- **IPTV×CVB广告监测** → `projects/iptv-cvb.md`（与广电总局CVB合作，分天数据先上，实时数据待总局开发）
+所有项目状态和跟进清单见 **`projects/overview.md`**（唯一数据源）。
+
+补充索引：
+- **秒针产品图谱** → `miaozhen-products.md`
+- **Admonitor 计算链路** → `knowledge/admonitor-arch.md`
+- **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
 
 ---
 
@@ -106,28 +113,4 @@
 
 ---
 
-## 📥 待收取文档清单
-
-以下文档在历史对话中提到，但实际内容尚未发给古古，需要小胡补充：
-
-**项目文档类：**
-- [ ] `OTT实验室升级.docx` 完整内容 — 含附录1/2/3和Haleon需求
-- [ ] `CBP无障碍服务广告监测-调研结论报告.docx` 完整内容
-- [ ] 三九报价方案文档 — 方案A/B/C具体内容（内部确认后报价要用）
-- [ ] 公司Agentic AI战略文件（打造全球领先的Agentic AI产品和品牌.md）— 群里发的集团目标文件，需存档
-- [ ] IPDX×广电合作资料 — 项目文件待建立
-
-**技术文档类：**
-- [ ] HSV 方案技术文档 — 智屏视界视频像素验证方案细节
-- [ ] 哈希方案（pHash）技术文档 — 智屏视界视频像素验证方案细节
-- [ ] 智屏视界 POC 测试结果 — POC 跑完后回传
-
-**分析结果类（等小胡完成后同步）：**
-- [ ] 蚂蚁 IVT 数据分析结论 — CSV数据小胡尚未完成分析
-- [ ] Prebid MAC vs IEEE 重合度分析结果 — 分析完后告知
-
-## 📋 待确认 TODO
-
-- [ ] KA品牌安全：AI风险分析具体设计待深入了解
-- [ ] 三九×龙虾Agent：报价方案内部确认后告知结论
-- [ ] IPDX×广电合作：资料待收取，项目文件待建立
+---
