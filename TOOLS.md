@@ -1,20 +1,29 @@
 # TOOLS.md — 工具配置
 
-## AdMonitor API
-
-- **baseUrl**: `https://llm-gateway.mlamp.cn/v1`
-- **apiKey**: `sk-mC1…UR4v`（完整 key 在 `~/.openclaw-gugu/openclaw.json`）
-
 ## OpenClaw 配置
 
 - **配置文件**: `~/.openclaw-gugu/openclaw.json`
 - **默认模型**: `custom-llm-gateway-mlamp-cn/mlamp/kimi-k2.6`
 - **Gateway 端口**: 18790
+- **Profile**: gugu
+
+## mlamp 网关
+
+- **baseUrl**: `https://llm-gateway.mlamp.cn/v1`
+- **apiKey**: 在 `~/.openclaw-gugu/openclaw.json` 中
+- **免费模型**: kimi-k2.6, glm-5.2, deepseek-v4-pro, qwen3-8b 等
+- **配额模型**: tencent/kimi-k2.6, tencent/glm-5.2, txds/deepseek-v4-pro, qwen3.6-plus, claude-sonnet-4-6
+
+## 备份
+
+- **仓库**: `https://github.com/huyingxin619-arch/gugu-bot.git`
+- **频率**: 每天凌晨 3:00
+- **cron ID**: `9716d362-3dfd-4217-8379-2cd0b22c98f5`
 
 ## 脚本路径
 
-- **工作目录**: `/Users/adm/.openclaw-gugu/workspace-gugu`
-- **memory 目录**: `/Users/adm/.openclaw-gugu/workspace-gugu/memory/`
+- **工作目录**: `~/.openclaw-gugu/workspace-gugu`
+- **memory 目录**: `~/.openclaw-gugu/workspace-gugu/memory/`
 
 ---
 
