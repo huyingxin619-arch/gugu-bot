@@ -3,7 +3,7 @@
 ## OpenClaw 配置
 
 - **配置文件**: `~/.openclaw-gugu/openclaw.json`
-- **默认模型**: `custom-llm-gateway-mlamp-cn/mlamp/kimi-k2.6`
+- **默认模型**: `custom-llm-gateway-mlamp-cn/tencent/glm-5.2`
 - **Gateway 端口**: 18790
 - **Profile**: gugu
 
