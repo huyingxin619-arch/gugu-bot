@@ -71,6 +71,17 @@
 - **秒针产品图谱** → `miaozhen-products.md`
 - **Admonitor 计算链路** → `knowledge/admonitor-arch.md`
 - **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
+- **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`（快速理解版，含IVT规则全量、设备ID体系、打通算法、GAP排查）
+- **知识文件索引（飞书文档内引用）：**
+  - 完整基础知识 → `memory/admonitor-basics.md`
+  - 企业资质/公司背景 → `memory/admonitor-company.md`
+  - IVT规则全量 → `memory/admonitor-ivt-rules.md`
+  - TA/Reach/打通算法 → `memory/admonitor-ta-reach.md`
+  - 同源机房/媒体对接 → `memory/admonitor-media-service.md`
+  - 数据洞察界面 → `memory/admonitor-ui-guide.md`
+  - M+ API文档 → `memory/mplus-api-doc-v4.3.md`
+  - 踩坑记录 → `memory/pitfalls.md`
+  - API拉数SOP → `skills/admonitor/SKILL.md`
 
 ---
 
