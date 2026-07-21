@@ -72,6 +72,7 @@
 - **Admonitor 计算链路** → `knowledge/admonitor-arch.md`
 - **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`（快速理解版，含IVT规则全量、设备ID体系、打通算法、GAP排查）
+- **IEEE OUI匹配分析** → `knowledge/ieee-oui-matching.md`（挂靠ZPSJ，关联IVT）
 - **知识文件索引（飞书文档内引用）：**
   - 完整基础知识 → `memory/admonitor-basics.md`
   - 企业资质/公司背景 → `memory/admonitor-company.md`
