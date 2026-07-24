@@ -55,6 +55,7 @@ KA客户（宝洁）的OTT投放中，需要对设备MAC进行IEEE OUI匹配以�
 1. 误判m6b为非MAC（32位=MD5加密后正常长度，不是"不是MAC"）
 2. 误判m字段=SDK类型（m是媒体ID不是SDK类型）
 3. no_match.txt混入了其他活动数据（VIDAA_TV 169个UUID是副产品）
+4. 混淆Build型号和Android版本——两个是不同维度，不能互相替代。Build型号是固件版本号，Android版本是操作系统版本。被小胡纠正
 
 ## 字段知识
 
@@ -69,11 +70,65 @@ KA客户（宝洁）的OTT投放中，需要对设备MAC进行IEEE OUI匹配以�
 
 ## 待办
 
-- [ ] 追秒针内部技术侧OUI查询结果（cron已设7/23 11:00）
+- [x] 追秒针内部技术侧OUI查询结果（cron已设7/23 11:00）
   - 这是秒针内部的事，不是海信侧
   - 匹配上的MAC对应OUI都是哪些厂商
   - 未匹配MAC的原始OUI前缀
   - 判断是IEEE库版本问题还是异常
+
+## 7/23 技术侧OUI查询结果分析
+
+### 数据文件
+- 技术侧提供了filtered数据（匹配上的MAC + IEEE OUI信息）
+- 小米：xiaomi_20260627_filtered.csv（57360行）
+- 海信：hisense_20260709_filtered_part_00~05.csv（6个文件，共395175行）
+- 文件存于 /tmp/ieee-data/
+- 未匹配MAC的原始OUI前缀无法获取（MAC是MD5回传，不可逆）
+
+### 小米OUI分布
+- Sichuan AI-Link Technology Co.：77.09%（代工厂）
+- FN-LINK TECHNOLOGY Ltd.：22.76%（代工厂）
+- Beijing Xiaomi Electronics Co.：0.14%
+- matchType：upper 99.96%，lower/maohaoLower 0.04%（199条非upper）
+- 小米自己的OUI占比极低，基本都是代工厂的网卡芯片
+
+### 海信OUI分布
+- HISENSE VISUAL TECHNOLOGY CO.：52.97%
+- Hisense Electric Co.：21.66%
+- Qingdao Hisense Electronics Co.：14.66%
+- Qingdao Hisense Communications Co.：10.71%
+- matchType：100% upper，全部匹配上
+- 海信系OUI占100%，设备都是海信自产
+
+### 未匹配 vs 匹配上 对比分析
+
+#### UUID交集
+- 未匹配SmartTV 595个UUID，与匹配上104644个UUID零交集
+- 再次确认BRAUN组和SAFEGUARD组触达设备群体完全不同
+
+#### 设备型号（Build型号）
+- 未匹配Top5：MRA58K(34.7%)、OPR6(22.7%)、KTU84P(20.3%)、OPR5(12.2%)、NRD90M(5.7%)
+- 匹配上Top5：PPR2.180905(48.8%)、MRA58K(9.7%)、KTU84P(7.9%)、KOT49H(6.6%)、PPR1.180610(5.1%)
+- 每个Build型号都有匹配上和未匹配的，不存在“全部未匹配”的型号
+- UUID级别未匹配率：OPR5 3.5%、OPR6 3.0%、MRA58K 2.0%、KTU84P 1.5%
+- 结论：设备型号不是未匹配的根因
+
+#### Android版本
+- 未匹配：Android 8.0(34.8%)、6.0(34.7%)、4.4.4(20.3%)、7.0(5.7%)、8.1(3.1%)、9(0.2%)
+- 匹配上：Android 9(53.9%)、6.0(9.7%)、4.4.4(7.9%)、4.4.2(6.6%)、8.0(5.9%)
+- Android版本也不是决定因素，每个版本都有匹配上和未匹配的
+
+### 结论
+
+1. 匹配上的设备OUI全部是对应品牌（海信=海信系，小米=代工厂），验证了设备真实性
+2. 未匹配的MAC无法反推原始OUI前缀（MD5不可逆），无法判断未匹配MAC属于哪些厂商
+3. 设备型号和Android版本都不是未匹配的根因，未匹配分散在多个型号中
+4. MAC不在IEEE库 ≠ 异常流量，IVT规则里没有这条，未匹配设备无刷量特征
+5. 最可能的原因：个别网卡芯片未注册OUI或IEEE库版本未覆盖，但无法进一步验证
+
+### 踩坑补充
+
+4. 混淆Build型号和Android版本——两个是不同维度，不能互相替代。Build型号是固件版本号，Android版本是操作系统版本。已被小胡纠正，更新AGENTS.md触发式自检第6条
 
 ## 相关文件
 

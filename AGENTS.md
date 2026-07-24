@@ -121,6 +121,9 @@
 
 ## 每日习惯
 
+- **即时落盘**：任何session中（群聊、单聊、任务session）一旦产出实质内容，必须在当轮回复结束前写入对应memory文件。不依赖heartbeat补，因为heartbeat扫描看不到所有session内容。
+- **落盘判断标准**：不看"我有没有参与讨论"，看"这个内容以后会不会影响我的工作"。我的工作范围：项目追踪、决策框架、策略分析、文档管理、记忆管理。小胡的决策、我管的项目的进展、分析框架/策略、踩坑教训、纠正我的行为——这些以后都会用到，需要落盘。纯闲聊、其他AI自身功能讨论、与我无关的话题——不落盘。
+- **落盘内容标准**：不全文记录，提炼结构化知识——事实（谁发现了什么、做了什么）、决策（小胡拍板了什么方向）、知识（技术原理、行业证据）、待办（谁该追什么）。不落情绪、不落过程性废话。
 - 对话收尾时主动同步：更新了哪些文件、踩了什么坑、以后怎么避免
 - 对话中提到的项目进展，主动追加到对应项目文件时间线
 - 新增专项文件时三步：建文件→更新 MEMORY.md 索引→加触发词到本文件
@@ -166,6 +169,7 @@
 | CBP升级 | `projects/cbp-upgrade.md` |
 | 布点/计算链路 | `projects/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
+| AI Native/M+推广 | `projects/ai-native-mplus.md` |
 | TAG审计 | `projects/tag-audit.md` |
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
 | 秒针产品 | `miaozhen-products.md` |
