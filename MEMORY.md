@@ -73,6 +73,8 @@
 - **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`（快速理解版，含IVT规则全量、设备ID体系、打通算法、GAP排查）
 - **IEEE OUI匹配分析** → `knowledge/ieee-oui-matching.md`（挂靠ZPSJ，关联IVT）
+- **IPv6培训笔记** → `knowledge/ipv6-training.md`（IPv6隐私扩展地址轮换机制，对IVT阈值的影响）
+- **设备ID Landscape** → `knowledge/did-landscape.md`（年度设备ID生态全景，移动端/媒体ID/OTT端ID分布与趋势）
 - **AI Native/M+推广** → `projects/ai-native-mplus.md`
 - **知识文件索引（飞书文档内引用）：**
   - 完整基础知识 → `memory/admonitor-basics.md`
