@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>监测方式与UA来源</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #1a1a2e;
+    line-height: 1.6;
+  }
+  .slide {
+    width: 960px;
+    min-height: 540px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 48px 56px;
+    page-break-after: always;
+    position: relative;
+  }
+  .slide-num {
+    position: absolute;
+    bottom: 20px;
+    right: 28px;
+    font-size: 12px;
+    color: #999;
+  }
+  h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  h2 { font-size: 24px; font-weight: 650; margin-bottom: 20px; color: #1a1a2e; }
+  h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #333; }
+  .subtitle { font-size: 16px; color: #666; margin-bottom: 32px; }
+  .content { font-size: 15px; }
+  .highlight-box {
+    background: #f0f4ff;
+    border-left: 4px solid #4a6cf7;
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 15px;
+  }
+  .flow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 28px 0;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: #f0f4ff;
+    border: 2px solid #4a6cf7;
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 130px;
+  }
+  .flow-box.green { background: #f0fff4; border-color: #38a169; }
+  .flow-box.orange { background: #fffaf0; border-color: #dd6b20; }
+  .flow-box.red { background: #fff5f5; border-color: #e53e3e; }
+  .flow-box.gray { background: #f7fafc; border-color: #a0aec0; }
+  .flow-arrow {
+    font-size: 24px;
+    color: #4a6cf7;
+    font-weight: bold;
+  }
+  .flow-label {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .two-col {
+    display: flex;
+    gap: 32px;
+    margin: 20px 0;
+  }
+  .col {
+    flex: 1;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  .col-blue { background: #f0f4ff; }
+  .col-green { background: #f0fff4; }
+  .col-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+  }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 8px; }
+  .ua-example {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 13px;
+    margin: 8px 0;
+    word-break: break-all;
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .compare-table th {
+    background: #f0f4ff;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 650;
+    border-bottom: 2px solid #4a6cf7;
+  }
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .compare-table tr:hover { background: #f7fafc; }
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag-blue { background: #ebf4ff; color: #4a6cf7; }
+  .tag-green { background: #f0fff4; color: #38a169; }
+  .tag-red { background: #fff5f5; color: #e53e3e; }
+  .section-gap { margin-top: 28px; }
+  .divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 24px 0;
+  }
+  .big-point {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #4a6cf7;
+    margin: 32px 0;
+  }
+  .note {
+    font-size: 13px;
+    color: #888;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== Slide 1: 封面 ========== -->
+<div class="slide" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+  <div style="font-size:14px;color:#4a6cf7;font-weight:600;letter-spacing:2px;margin-bottom:16px;">广告监测技术说明</div>
+  <h1 style="font-size:36px;margin-bottom:12px;">监测方式与UA来源</h1>
+  <div class="subtitle" style="font-size:17px;">SDK监测 vs API监测 — User-Agent 链路解析</div>
+  <div style="margin-top:48px;font-size:13px;color:#999;">秒针系统 · AdMonitor</div>
+  <div class="slide-num">1</div>
+</div>
+
+<!-- ========== Slide 2: 核心原则 ========== -->
+<div class="slide">
+  <h2>核心原则</h2>
+  <div class="subtitle">理解UA来源的一句话</div>
+
+  <div class="big-point" style="font-size:28px;margin:48px 0;">
+    谁发起 HTTP 请求，UA 就由谁决定
+  </div>
+
+  <div class="flow-container">
+    <div>
+      <div class="flow-box">发起方<br><span style="font-size:12px;font-weight:400;">（HTTP客户端）</span></div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box">决定 UA 内容</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box green">秒针收数服务器<br><span style="font-size:12px;font-weight:400;">（terran 解析 header）</span></div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <strong>秒针的角色：</strong>收数服务器（terran）从 HTTP 请求的 header 中解析 User-Agent。UA 不是秒针采集或生成的，是 HTTP 协议的标准行为——发起请求的客户端自动携带。
+  </div>
+
+  <div class="slide-num">2</div>
+</div>
+
+<!-- ========== Slide 3: SDK监测 UA链路 ========== -->
+<div class="slide">
+  <h2>SDK 监测：UA 链路</h2>
+  <div class="subtitle">秒针 SDK 嵌入媒体 APP，SDK 发起监测请求</div>
+
+  <div class="flow-container" style="margin:32px 0;">
+    <div>
+      <div class="flow-box">媒体 APP</div>
+      <div class="flow-label">嵌入秒针 SDK</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box">秒针 SDK</div>
+      <div class="flow-label">调系统网络库发请求</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box orange">系统网络库</div>
+      <div class="flow-label">自动注入默认 UA</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box green">秒针收数服务器</div>
+      <div class="flow-label">解析 UA</div>
+    </div>
+  </div>
+
+  <h3>UA 来源细节</h3>
+  <ul>
+    <li>SDK 调用系统网络库发送 HTTP 请求（iOS 用 <code>URLSession</code>，Android 用 <code>OkHttp</code> / <code>HttpURLConnection</code>）</li>
+    <li>SDK <strong>没有显式设置</strong> User-Agent header</li>
+    <li>系统网络库在发送请求时<strong>自动补上默认 UA</strong>——这是 HTTP 客户端的标准行为</li>
+    <li>SDK 使用独立网络客户端，不受 APP 自定义 UA 影响</li>
+  </ul>
+
+  <div class="slide-num">3</div>
+</div>
+
+<!-- ========== Slide 4: SDK默认UA示例 ========== -->
+<div class="slide">
+  <h2>SDK 监测：系统网络库默认 UA 示例</h2>
+  <div class="subtitle">SDK 未主动设置时，系统自动生成的 UA 格式</div>
+
+  <div class="two-col">
+    <div class="col col-blue">
+      <div class="col-title">📱 iOS（URLSession / CFNetwork）</div>
+      <p style="font-size:13px;margin-bottom:12px;">框架自动生成，通常包含 App 名称、版本、设备型号、iOS 版本</p>
+      <div class="ua-example">
+        MyApp/1.0 (iPhone14,2; iOS 17.0; Scale/3.00)
+      </div>
+      <div class="ua-example">
+        CFNetwork/1410.0.3 Darwin/22.5.0
+      </div>
+    </div>
+    <div class="col col-green">
+      <div class="col-title">🤖 Android（OkHttp / HttpURLConnection）</div>
+      <p style="font-size:13px;margin-bottom:12px;">OkHttp 带版本号；HttpURLConnection 带 Dalvik 系统信息</p>
+      <div class="ua-example">
+        okhttp/4.12.0
+      </div>
+      <div class="ua-example">
+        Dalvik/2.1.0 (Linux; U; Android 13; SM-G991B Build/TP1A.220624.014)
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top:24px;">
+    <strong>关键特征：</strong>这些 UA 不含 <code>Mozilla</code>、<code>Safari</code>、<code>Mobile</code> 等标准浏览器标识，格式与浏览器 UA 有本质差异。
+  </div>
+
+  <div class="slide-num">4</div>
+</div>
+
+<!-- ========== Slide 5: API监测 UA链路 ========== -->
+<div class="slide">
+  <h2>API 监测：UA 链路</h2>
+  <div class="subtitle">媒体 APP 自己的代码发起监测请求（C2S，非秒针 SDK 触发）</div>
+
+  <div class="flow-container" style="margin:32px 0;">
+    <div>
+      <div class="flow-box">媒体 APP</div>
+      <div class="flow-label">APP 自己的代码</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box orange">APP 网络层</div>
+      <div class="flow-label">发 HTTP 请求</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box green">秒针收数服务器</div>
+      <div class="flow-label">解析 UA</div>
+    </div>
+  </div>
+
+  <h3>UA 来源细节</h3>
+  <ul>
+    <li>监测请求由媒体 APP 自己的代码发起，不是秒针 SDK</li>
+    <li>UA 由媒体 APP 决定：</li>
+    <li style="margin-left:20px;">— 如果 APP 主动设置了 UA → 使用 APP 自定义的 UA</li>
+    <li style="margin-left:20px;">— 如果 APP 没有设置 → 走 APP 网络库的默认值</li>
+    <li>不同媒体 APP 的实现可能不同，UA 格式取决于各媒体的开发实践</li>
+  </ul>
+
+  <div class="slide-num">5</div>
+</div>
+
+<!-- ========== Slide 6: 两种方式对比 ========== -->
+<div class="slide">
+  <h2>SDK 监测 vs API 监测：UA 对比</h2>
+  <div class="subtitle">核心差异：谁发起 HTTP 请求</div>
+
+  <table class="compare-table">
+    <tr>
+      <th style="width:25%;">维度</th>
+      <th style="width:37.5%;">SDK 监测</th>
+      <th style="width:37.5%;">API 监测</th>
+    </tr>
+    <tr>
+      <td><strong>HTTP 请求发起方</strong></td>
+      <td>秒针 SDK</td>
+      <td>媒体 APP 自己的代码</td>
+    </tr>
+    <tr>
+      <td><strong>UA 由谁决定</strong></td>
+      <td>系统网络库（URLSession / OkHttp）</td>
+      <td>媒体 APP</td>
+    </tr>
+    <tr>
+      <td><strong>是否主动设置 UA</strong></td>
+      <td><span class="tag tag-red">未设置</span></td>
+      <td>取决于媒体 APP 实现</td>
+    </tr>
+    <tr>
+      <td><strong>UA 内容</strong></td>
+      <td>系统网络库默认格式</td>
+      <td>APP 自定义 或 网络库默认</td>
+    </tr>
+    <tr>
+      <td><strong>是否含浏览器标识</strong></td>
+      <td><span class="tag tag-red">通常不含</span></td>
+      <td>取决于 APP 是否设置</td>
+    </tr>
+    <tr>
+      <td><strong>受 APP 自定义 UA 影响</strong></td>
+      <td><span class="tag tag-green">不受影响</span>（SDK 用独立客户端）</td>
+      <td><span class="tag tag-blue">由 APP 自身决定</span></td>
+    </tr>
+  </table>
+
+  <div class="slide-num">6</div>
+</div>
+
+<!-- ========== Slide 7: 为什么SDK流量被判成PC ========== -->
+<div class="slide">
+  <h2>为什么 SDK 流量会被判成 PC</h2>
+  <div class="subtitle">UA 解析逻辑的 fallback 机制</div>
+
+  <div class="flow-container" style="margin:28px 0;">
+    <div>
+      <div class="flow-box">SDK 流量的 UA</div>
+      <div class="flow-label">okhttp/4.12.0 等</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box orange">UA 解析引擎</div>
+      <div class="flow-label">匹配移动端特征</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box red">匹配不到</div>
+      <div class="flow-label">无 Mobile / iPhone / Android</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div>
+      <div class="flow-box red">Fallback: PC</div>
+      <div class="flow-label">默认判定</div>
+    </div>
+  </div>
+
+  <h3>原因拆解</h3>
+  <ul>
+    <li>平台判断依赖 UA 解析，通过 UA 中的特征标识（如 <code>Mobile</code>、<code>iPhone</code>、<code>Android</code>）识别移动端</li>
+    <li>SDK 流量的 UA 是系统网络库格式（如 <code>okhttp/4.12.0</code>），不含这些标准浏览器移动端标识</li>
+    <li>UA 解析引擎匹配不到移动端特征 → <strong>fallback 成 PC</strong></li>
+  </ul>
+
+  <div class="highlight-box">
+    <strong>本质：</strong>UA 解析体系在设计时面向浏览器流量，浏览器 UA 有标准格式和移动端标识。SDK 监测场景的 UA 来自系统网络库，不在这个体系覆盖范围内。
+  </div>
+
+  <div class="slide-num">7</div>
+</div>
+
+<!-- ========== Slide 8: 总结 ========== -->
+<div class="slide">
+  <h2>总结</h2>
+  <div class="subtitle">三句话讲清楚 UA 来源</div>
+
+  <div style="margin-top:32px;">
+    <div class="highlight-box" style="margin-bottom:20px;">
+      <strong>1.</strong> UA 是 HTTP 请求的客户端自动携带的，秒针收数服务器（terran）从 header 中解析。<strong>谁发起请求，UA 就由谁决定。</strong>
+    </div>
+
+    <div class="highlight-box" style="margin-bottom:20px;">
+      <strong>2.</strong> SDK 监测中，秒针 SDK 调系统网络库发请求，SDK 未主动设置 UA，系统网络库自动注入默认 UA（不含浏览器移动端标识）。
+    </div>
+
+    <div class="highlight-box" style="margin-bottom:20px;">
+      <strong>3.</strong> API 监测中，媒体 APP 自己的代码发请求，UA 由媒体 APP 决定（自定义或网络库默认值）。
+    </div>
+  </div>
+
+  <div style="margin-top:40px;text-align:center;font-size:14px;color:#666;">
+    以上为技术说明，如有疑问欢迎进一步沟通
+  </div>
+
+  <div class="slide-num">8</div>
+</div>
+
+</body>
+</html>
