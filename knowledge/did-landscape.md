@@ -134,6 +134,7 @@ IDFA > OAID > IMEI > CAID > AndroidID > OPENUDID > Windows Phone DUID > MAC
 - 这份review只for P&G
 - 今年没有新增其他媒体ID的计划
 - IPv6与IVT是重要topic，但目前分析不够严谨
+- Elsa发现OTT端只有IPV6的DID关联IP唯一性数据、缺少IPV4对比，且爱奇艺/咪咕/未来电视三个媒体IPV4切换更频繁，可能与优先取有线MAC地址有关。需进一步思考原因
 
 ## 内部修改清单（小胡 17:29 发送）
 1. P4-增加鸿蒙操作系统，对应OAID

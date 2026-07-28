@@ -2,7 +2,7 @@
 
 > 唯一数据源。cron job「每日11点汇报」直接读取此文件生成汇报。
 > 更新规则：任何项目状态变化 → 先改对应 `projects/xxx.md` → 再同步到此文件。
-> 最后更新：2026-07-27
+> 最后更新：2026-07-28
 
 ---
 
@@ -37,7 +37,7 @@
 
 ### 5. 布点项目
 - **负责人：** 小胡
-- **当前状态：** 🔄 **二次上线（7/22）** — bug修复中，3个已修✅，1个排查中🔄
+- **当前状态：** 🔄 **二次上线（7/22）** — bug修复中，3个已修✅，1个排查中🔄，2个适配项待排期
 - **核心进展：**
   - TVM批量导入模版下拉框错位✅、自定义任务计算失败✅、布点活动点位plan为空DR计算bug✅ 均已修复
   - ADM任务归档功能提交任务失败 🔄正在排查
@@ -159,6 +159,18 @@
   - 关键异常媒体：Sina Weibo（caidmultiidfa 3.3%）、HunanTV（androididmultioaid 1.43%）等
 - **详情：** `projects/ivt-multi-rules.md`
 
+### 15. UA来源深度排查
+- **负责人：** SDK 产研沟通群（张乾、王立涛、王浩阳、于长亮、于晓蕾）
+- **当前状态：** 🔴 排查中
+- **核心进展：** 确认 SDK 不主动采集 UA；芒果 3668 次 PC 曝光 UA 含 Windows NT 特征；王立涛判断 UA 被篡改但签名校验未检出；rawlog 验证中
+- **详情：** `projects/ua-source-investigation.md`
+
+### 16. IAB 会员续费
+- **负责人：** 小胡
+- **当前状态：** 🔄 合同流程中
+- **核心进展：** 采购要求重新签合同，Shirley 已将新合同发给 IAB，预算已预留，待与财务确认付款 quota（付款需排队，每月有固定支付金额，需单独和财务沟通确认打款）
+- **详情：** `projects/iab-membership.md`
+
 ---
 
 ## 📂 项目文件对应关系
@@ -179,6 +191,8 @@
 | 12 | CBP升级 | `projects/cbp-upgrade.md` |
 | 13 | OTT实验室 | `projects/ott-lab-upgrade.md` |
 | 14 | IVT Multi规则升级 | `projects/ivt-multi-rules.md` |
+| 15 | UA来源深度排查 | `projects/ua-source-investigation.md` |
+| 16 | IAB会员续费 | `projects/iab-membership.md` |
 
 ---
 
