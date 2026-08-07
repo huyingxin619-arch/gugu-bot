@@ -11,8 +11,8 @@
 
 - **baseUrl**: `https://llm-gateway.mlamp.cn/v1`
 - **apiKey**: 在 `~/.openclaw-gugu/openclaw.json` 中
-- **免费模型**: kimi-k2.6, glm-5.2, deepseek-v4-pro, qwen3-8b 等
-- **配额模型**: tencent/kimi-k2.6, tencent/glm-5.2, txds/deepseek-v4-pro, qwen3.6-plus, claude-sonnet-4-6
+- **免费模型**: glm-5.2, deepseek-v4-pro, qwen3-8b 等（kimi-k2.6 已下线，已删除）
+- **配额模型**: tencent/kimi-k2.6, tencent/glm-5.2, tencent/kimi-k3, txds/deepseek-v4-pro, qwen3.6-plus, claude-sonnet-4-6
 
 ## 备份
 
