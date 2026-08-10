@@ -31,6 +31,36 @@
 | `projects/adm-drill-api-prd.md` | PRD 文档（含技术实施风险清单第14节） |
 | `projects/adm-drill-api.md` | 本文件（项目管理） |
 
+## 上线后遗漏教训（2026-08-10）
+
+### 问题一：ADM Custom分规则指标create报错
+- **现象：** givttotal_imp/clk、sivttotal_basic_imp/clk、sivttotal_advanced_imp/clk、sivttotal_h2_imp/clk 共8个分规则指标，detail接口能正常返回数据，但create接口传这些token会报错
+- **根因：** case设计阶段已穷举所有verify token（ADM-CUS-CRT-058~121，共30个case含后缀变体），但全部因QA账号缺`FUNCTIONAL:query_verify_*`权限标记为⏸️待测，上线时未解决权限阻塞就过了
+- **断点：** 上线决策——权限阻塞case不得作为可跳过项
+
+### 问题二：TVM sheetBy限制与界面不一致
+- **现象：** 界面上SIVT指标可按活动分sheet和按地域分sheet，无sheetBy限制；API强制要求sheetBy=0（899高阶版），与界面行为不一致
+- **根因：** case只按API文档定义的合法组合设计，没有拿界面实际行为做交叉校验。PRD第14.1节明确要求"API必须与界面行为一致"，但风险清单未转化为可执行test case
+- **断点：** case设计——锚点是API文档而非界面实际行为
+
+### 问题三：缺少列出历史任务接口
+- **现象：** 用户通过API无法列出自己提交过哪些任务，只能用status批量查（需提前知道taskId）或detail单个查
+- **根因：** PRD第5.6节设计了 `GET /admonitor/v1/drill/tasks` 列历史任务接口，但技术实现时未做。同样属于“未与界面对齐”——界面上有任务列表页，API没有对应能力
+- **断点：** 开发范围——PRD设计了但技术未实现，测试阶段也没有case覆盖（因为接口不存在）
+### 共同根因
+
+**问题一和问题二**的共同根因：测试case设计锚点是"API文档"而非"界面实际行为"。如果把界面行为作为基准线做交叉比对，这两个问题都会在测试阶段暴露。
+
+**问题三**的根因不同：是开发范围遗漏——PRD设计了但未实现，属于需求交付不完整。但本质也是“未与界面对齐”——界面上有任务列表页，API没有。
+
+### 防复发措施
+1. 权限阻塞case不得跳过上线——必须解决或显式标注"接受风险上线"并由小胡确认
+2. case设计必须做界面行为对齐——拿界面实际行为做一轮交叉比对，确保界面能做的操作API都有覆盖
+3. PRD风险清单每条必须对应至少一个可执行test case
+
+### 自检触发（已更新到AGENTS.md第6条）
+当基于文档/规格做设计、判断或验证时 → 先回答：有没有拿实际行为/真实数据/字段定义做交叉校验？不允许只从文档推导就下结论
+
 ---
 
 ## 里程碑
@@ -51,6 +81,8 @@
 | 2026-08-06 | 天网完成v11测试交接（455case，96%通过，2个API bug已修复） | ✅ 完成 |
 | 2026-08-06 | **正式上线**，交付烟台业务 | ✅ 完成 |
 | TBD | 根据业务反馈持续迭代 | 🔄 |
+| 2026-08-10 | 小胡反馈三个缺口：①ADM Custom分规则指标(givttotal/sivttotal_basic/advanced/h2的imp/clk)创建任务报错但detail能正常显示；②TVM sheetBy限制与界面不一致(界面无sheetBy限制，API有)；③缺少列出历史任务/按条件查询历史任务的接口 | 🔴 待修复 |
+| TBD | 修复上述两个问题并补测 | 🔄 |
 | 2026-08-06 | 天网完成v11测试交接（455case，96%通过，2个API bug已修复） | ✅ 完成 |
 | TBD | 联调测试 | ⏳ 待排 |
 | TBD | 上线 | ⏳ 待排 |
@@ -80,6 +112,11 @@
 - [ ] 在群里与 AdMonitor 一起讨论技术实施风险清单
 - [ ] 联调测试安排
 - [ ] 上线后验证
+- [ ] **报技术侧修复：ADM Custom create接口不支持分规则verify token（givttotal_imp/clk、sivttotal_basic_imp/clk、sivttotal_advanced_imp/clk、sivttotal_h2_imp/clk）——detail能返回但create报错**
+- [ ] **报技术侧修复：TVM sheetBy限制与界面不一致——界面SIVT指标可按活动/按地域分sheet无限制，API有sheetBy=0强制限制**
+- [ ] **报技术侧补接口：列出历史任务/按条件查询历史任务——当前只有status(批量查状态)+detail(单个查详情)，缺少list接口，用户无法通过API获取自己提交过哪些任务**
+- [ ] **补测：权限阻塞case（ADM-CUS-CRT-058~121，verify token系列）解决权限后全部补跑**
+- [ ] **补测：界面行为对齐case——拿界面实际操作做一轮交叉比对，确保界面能做的操作API都有覆盖**
 
 ---
 
