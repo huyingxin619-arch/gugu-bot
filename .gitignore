@@ -1,3 +1,5 @@
 # Embedded gugu workspace repo
 gugu/
 memory/local-credentials.md
+node_modules/
+package-lock.json
