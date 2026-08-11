@@ -165,15 +165,14 @@
 
 | 话题 | 先读文件 |
 |------|---------|
-| Prebid/MAC黑名单 | `projects/prebid-mac-blacklist.md` |
+| Prebid/MAC黑名单 | `projects/ivt/prebid-mac-blacklist.md` |
 | 智屏视界/ZPSJ/视频像素/IEEE匹配 | `projects/zpsj/zpsj-video-verification.md` |
 | 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
 | ADM看板/Bot | `projects/admonitor-bot-dashboard.md` |
 | OTT实验室 | `projects/ott-lab-upgrade.md` |
 | CBP升级 | `projects/cbp-upgrade.md` |
-| 布点/计算链路 | `projects/ai-adaptation/admonitor-budian.md` |
+| 布点/计算链路 | `projects/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
-| AI Native/M+推广 | `projects/ai-native-mplus.md` |
 | TAG审计 | `projects/tag-audit.md` |
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
 | 秒针产品 | `miaozhen-products.md` |

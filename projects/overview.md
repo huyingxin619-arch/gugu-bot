@@ -183,21 +183,21 @@
 |---|--------|----------|
 | 1 | KA品牌安全 | `projects/ka-brand-safety.md` |
 | 2 | 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
-| 3 | TAG审计 | `projects/tag-audit.md` |
-| 4 | ADM龙虾看板 | `projects/admonitor-bot-dashboard.md` |
-| 5 | 布点项目 | `projects/ai-adaptation/admonitor-budian.md` |
+| 3 | TAG审计 | `projects/audit/tag-audit.md` |
+| 4 | ADM龙虾看板 | `projects/ai-adaptation/admonitor-bot-dashboard.md` |
+| 5 | 布点项目 | `projects/admonitor-budian.md` |
 | 6 | AI适配建设（主线） | `projects/ai-adaptation/ai-adaptation.md` |
 | 6a | └ 多维钻取API | `projects/ai-adaptation/adm-drill/`（adm-drill-api.md + adm-drill-api-prd.md） |
 | 6b | └ API测试修复 | `projects/ai-adaptation/admonitor-api-test-fixes.md` |
 | 7 | 智屏视界 | `projects/zpsj/`（4个文件：video-verification、threshold-spec-v6、first-principles、technical-doc） |
-| 8 | Prebid MAC | `projects/platform/prebid-mac-blacklist.md` |
+| 8 | Prebid MAC | `projects/ivt/prebid-mac-blacklist.md` |
 | 9 | 三九×龙虾 | `projects/sanjiuagent.md`（含天网Agent SOUL） |
 | 10 | IPTV×CVB | `projects/iptv-cvb.md` |
-| 11 | CBP升级 | `projects/platform/cbp-upgrade.md` |
-| 12 | OTT实验室 | `projects/platform/ott-lab-upgrade.md` |
+| 11 | CBP升级 | `projects/ivt/cbp-upgrade.md` |
+| 12 | OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
 | 13 | IVT Multi规则升级 | `projects/ivt/ivt-multi-rules.md` |
 | 14 | UA来源深度排查 | `projects/ivt/ua-source-investigation.md` |
-| 15 | IAB会员续费 | `projects/iab-membership.md` |
+| 15 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | 16 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
 
 ---

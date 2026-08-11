@@ -53,27 +53,51 @@
 - **每日11点项目进展汇报**（工作日）：主动找小胡汇报各项目进展、追问待收文档、跟进 TODO
   - cron ID：`f16f1449-1a44-43c6-a7f9-c41fd33f8061`
   - 时间：周一至周五 11:00 Asia/Shanghai
+- **core-evolution周度诊断**：每周日凌晨3:30扫描所有内核文件+项目结构+索引同步
+  - cron ID：`7c704f9e-dcbd-48af-8808-8acc90991cc2`
+  - 时间：周日 03:30 Asia/Shanghai
 
 ---
 
-## 🗂️ 项目索引
+## 🗂️ 文件索引
 
-所有项目状态和跟进清单见 **`projects/overview.md`**（唯一数据源）。
+### 项目（projects/）
 
-补充索引：
+项目状态总览见 **`projects/overview.md`**（唯一数据源）。
+
+| 目录 | 项目 | 文件 |
+|------|------|------|
+| `projects/zpsj/` | 智屏视界 | zpsj-video-verification.md、zpsj-threshold-spec-v6.md、zpsj-first-principles.md、zpsj-technical-doc.md |
+| `projects/ai-adaptation/` | AI适配建设（主线） | ai-adaptation.md、admonitor-bot-dashboard.md、admonitor-api-test-fixes.md、adm-drill/（adm-drill-api.md + adm-drill-api-prd.md） |
+| `projects/ivt/` | IVT全家桶 | ant-ivt-research.md、ivt-multi-rules.md、ua-source-investigation.md、prebid-mac-blacklist.md、cbp-upgrade.md、ott-lab-upgrade.md |
+| `projects/audit/` | 审计/合规 | tag-audit.md、iab-membership.md |
+| `projects/` | 独立项目 | admonitor-budian.md（布点）、iptv-cvb.md（IPTV×CVB）、ka-brand-safety.md（品牌安全）、sanjiuagent.md（三九×龙虾，含天网Agent SOUL）、vivo-sdk-signature.md（vivo SDK签名） |
+
+### 知识库（knowledge/）
+
+| 文件 | 内容 |
+|------|------|
+| `adm-official-api-docs.md` | 官方API文档全文存档（132KB） |
+| `adm-api-doc-comparison.md` | 官方vs本地对比报告（23项差异） |
+| `adm-fixed-template-metrics-comparison.md` | by活动/网站/广告位指标差异 |
+| `admonitor-arch.md` | ADM计算链路 |
+| `adm-data-pull-sop.md` | 拉数SOP |
+| `adm-fields-reference.md` | 字段定义参考 |
+| `multi-dim-api-docs.md` | 多维API文档 |
+| `did-landscape.md` | 设备ID生态全景 |
+| `ieee-oui-matching.md` | IEEE OUI匹配（挂靠ZPSJ，关联IVT） |
+| `ipv6-training.md` | IPv6培训笔记（隐私扩展地址轮换） |
+
+### 其他索引
+
 - **秒针产品图谱** → `miaozhen-products.md`
-- **Admonitor 计算链路** → `knowledge/admonitor-arch.md`
-- **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
-- **ADM 字段定义参考** → `knowledge/adm-fields-reference.md`
-- **ADM 官方API文档存档** → `knowledge/adm-official-api-docs.md`（docs.cn.miaozhen.com 全文抓取，132KB）
-- **ADM API文档对比报告** → `knowledge/adm-api-doc-comparison.md`（官方vs本地，23项差异）
-- **固定模板指标对比** → `knowledge/adm-fixed-template-metrics-comparison.md`（by活动/网站/广告位指标差异）
-- **多维API文档** → `knowledge/multi-dim-api-docs.md`
-- **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`（快速理解版，含IVT规则全量、设备ID体系、打通算法、GAP排查）
-- **IEEE OUI匹配分析** → `knowledge/ieee-oui-matching.md`（挂靠ZPSJ，关联IVT）
-- **IPv6培训笔记** → `knowledge/ipv6-training.md`（IPv6隐私扩展地址轮换机制，对IVT阈值的影响）
-- **设备ID Landscape** → `knowledge/did-landscape.md`（年度设备ID生态全景，移动端/媒体ID/OTT端ID分布与趋势）
-- **AI Native/M+推广** → `projects/ai-native-mplus.md`
+- **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`
+
+### memory/ 分工文件
+
+- `workflow-rules.md` — 工作流规则（周报/备份规范）
+- `local-credentials.md` — 本地凭证
+- `YYYY-MM-DD.md` — 每日事件记录
 
 ---
 
