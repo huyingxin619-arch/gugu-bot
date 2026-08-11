@@ -24,13 +24,6 @@
 
 ---
 
-## 🤖 古古行为校准记录
-- **废弃的人设表述：** "资深私教级 AI 工作助理" ❌
-- **废弃的口头习惯：** 固定口头禅（如"哈"）、过度热情的塑料感回应 ❌
-- **待观察：** 人情味尺度的进一步微调 <来源: #2026-06-23-第一批>
-
----
-
 ## ✅ 备份机制
 
 - **仓库：** https://github.com/huyingxin619-arch/gugu-bot.git
@@ -46,7 +39,7 @@
 
 | 实例 | 端口 | HOME 目录 | 用途 | 默认模型 |
 |------|------|-----------|------|----------|
-| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理 | kimi-k2.6 |
+| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理 | glm-5.2 |
 | **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（拉取 ADM/TVM/M+ 数据）| claude-sonnet-4-6 → 已切换 |
 
 - **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
@@ -59,7 +52,7 @@
 
 - **每日11点项目进展汇报**（工作日）：主动找小胡汇报各项目进展、追问待收文档、跟进 TODO
   - cron ID：`f16f1449-1a44-43c6-a7f9-c41fd33f8061`
-  - 时间：周一至周五 09:00 → 实际已设为 11:00 Asia/Shanghai
+  - 时间：周一至周五 11:00 Asia/Shanghai
 
 ---
 
@@ -71,21 +64,16 @@
 - **秒针产品图谱** → `miaozhen-products.md`
 - **Admonitor 计算链路** → `knowledge/admonitor-arch.md`
 - **Admonitor 拉数SOP** → `knowledge/adm-data-pull-sop.md`
+- **ADM 字段定义参考** → `knowledge/adm-fields-reference.md`
+- **ADM 官方API文档存档** → `knowledge/adm-official-api-docs.md`（docs.cn.miaozhen.com 全文抓取，132KB）
+- **ADM API文档对比报告** → `knowledge/adm-api-doc-comparison.md`（官方vs本地，23项差异）
+- **固定模板指标对比** → `knowledge/adm-fixed-template-metrics-comparison.md`（by活动/网站/广告位指标差异）
+- **多维API文档** → `knowledge/multi-dim-api-docs.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`（快速理解版，含IVT规则全量、设备ID体系、打通算法、GAP排查）
 - **IEEE OUI匹配分析** → `knowledge/ieee-oui-matching.md`（挂靠ZPSJ，关联IVT）
 - **IPv6培训笔记** → `knowledge/ipv6-training.md`（IPv6隐私扩展地址轮换机制，对IVT阈值的影响）
 - **设备ID Landscape** → `knowledge/did-landscape.md`（年度设备ID生态全景，移动端/媒体ID/OTT端ID分布与趋势）
 - **AI Native/M+推广** → `projects/ai-native-mplus.md`
-- **知识文件索引（飞书文档内引用）：**
-  - 完整基础知识 → `memory/admonitor-basics.md`
-  - 企业资质/公司背景 → `memory/admonitor-company.md`
-  - IVT规则全量 → `memory/admonitor-ivt-rules.md`
-  - TA/Reach/打通算法 → `memory/admonitor-ta-reach.md`
-  - 同源机房/媒体对接 → `memory/admonitor-media-service.md`
-  - 数据洞察界面 → `memory/admonitor-ui-guide.md`
-  - M+ API文档 → `memory/mplus-api-doc-v4.3.md`
-  - 踩坑记录 → `memory/pitfalls.md`
-  - API拉数SOP → `skills/admonitor/SKILL.md`
 
 ---
 
@@ -107,7 +95,6 @@
 
 ## 📝 备注
 
-- 记忆恢复进行中（已处理4月批次对话记录，5月-6月段仍有空白）
 - 每天凌晨3点自动备份到 git
 
 ---

@@ -2,7 +2,7 @@
 
 > 唯一数据源。cron job「每日11点汇报」直接读取此文件生成汇报。
 > 更新规则：任何项目状态变化 → 先改对应 `projects/xxx.md` → 再同步到此文件。
-> 最后更新：2026-08-07
+> 最后更新：2026-08-11
 
 ---
 
@@ -56,8 +56,11 @@
 - **核心进展：**
   - 455个测试用例设计定稿（v9→v11三轮迭代），天网完成全量测试，最终通过率98.9%（450/455）
   - 修复2个API bug，遗留5个未通过（2个数据量依赖、3个环境依赖）
-  - 完成AI专用账号vs普通账号数据对比：ADM侧完全一致，TVM侧campaign_total一致、spot_byday和website_acc结构差异待确认
   - 8/6正式上线，交付烟台业务
+  - 8/10 小胡反馈三个缺口：①ADM Custom分规则指标create报错 ②TVM sheetBy限制与界面不一致 ③缺列出历史任务接口
+  - 8/11 完成固定模板by活动/网站/广告位指标差异分析
+  - 8/11 完成官方API文档全量对比（23项差异），以官方文档为准校正本地文档
+  - 8/11 发现鉴权隐患：monitor-intra-api可能未限制内部账号
 - **子项目清单：** 见 `projects/ai-adaptation.md`
 - **详情：** `projects/ai-adaptation.md`（主线）/ `projects/adm-drill-api.md`（多维钻取项目管理）
 
@@ -90,16 +93,15 @@
 ### 9. 三九×龙虾 Agent 项目
 - **客户：** 三九（医药行业KA客户）
 - **负责人：** 小胡
-- **当前状态：** 🔄 合同已到，启动准备中（本周7.27-7.31服务器配置+知识库调教）
+- **当前状态：** 🔄 开发中（8/1-8/21 指标模型开发阶段）
 - **核心进展：**
-  - ✅ **2026/7/23：合同下来了，已在申请API key和mlclaw服务器**
-  - 7/27 小胡发了启动会PDF，两个子项目对齐：
-    - **AI天网（Agent预警）：** 9大类指标监控，脚本+LLM辅助，每日自动巡检→智能简报→邮件推送。周期：7.27-7.31配置/8.1-8.21开发/8.24-9.11调优
-    - **人工监播（广告上报人工抽查）：** 代理服务器拦截+ADB截图+云存储+ADM API补全+时间窗口匹配。周期：7.27-8.21开发/8.27-9.11部署/9.14-9.18测试
-  - SNAP与人工监播关系已确认：复用SNAP基础能力，需额外适配VIP登录+定投剧目
-  - mlclaw = 明略自研轻量服务器，专门用于部署龙虾
-  - ✅ **简单版 PoC（2026/7/1）**：覆盖 2 条规则，通过 API 拉数 → 形成 detail 报告/情况汇总/发邮件
-- **待跟进：** ①服务器配置+知识库调教完成情况 ②指标模型开发启动
+  - ✅ 9大类异常指标完成第一性原理分析，归纳为三层防御体系（物理唯一性→行为自然→投放商业）
+  - ✅ 历史数据全量上传（164M+），输出 P90/P95/P99 数据驱动阈值，存档 thresholds.json
+  - ✅ 关键阈值：SIVT总率 OTT>5.59%警告/>9.05%严重；夜间曝光>6.22%/>11.51%；点位14:00 Gross<100严重未上线
+  - 🔄 三九某活动5/19起非签名曝光增多，待排查
+  - 🔄 小米OTT流量排查，王心宇负责实验室侧
+  - ✅ 简单版 PoC（2026/7/1）：覆盖2条规则
+- **待跟进：** ①小胡review阈值和三层防御体系 ②非签名曝光根因 ③小米OTT排查结果
 - **详情：** `projects/sanjiuagent.md`
 
 ### 9b. 三九人工监播项目（独立项目）
@@ -179,22 +181,24 @@
 
 | # | 项目名 | 文件路径 |
 |---|--------|----------|
-| 1 | KA品牌安全 | `ka-brand-safety.md` |
-| 2 | 蚂蚁IVT | `projects/ant-ivt-research.md` |
+| 1 | KA品牌安全 | `projects/ka-brand-safety.md` |
+| 2 | 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
 | 3 | TAG审计 | `projects/tag-audit.md` |
 | 4 | ADM龙虾看板 | `projects/admonitor-bot-dashboard.md` |
-| 5 | 布点项目 | `projects/admonitor-budian.md` |
-| 6 | AI适配建设（主线） | `projects/ai-adaptation.md` |
-| 7 | └ 多维钻取API | `projects/adm-drill-api.md` / `projects/adm-drill-api-prd.md` |
-| 8 | 智屏视界 | `projects/zpsj-video-verification.md` |
-| 9 | Prebid MAC | `projects/prebid-mac-blacklist.md` |
-| 10 | 三九×龙虾 | `projects/sanjiuagent.md` |
-| 11 | IPTV×CVB | `projects/iptv-cvb.md` |
-| 12 | CBP升级 | `projects/cbp-upgrade.md` |
-| 13 | OTT实验室 | `projects/ott-lab-upgrade.md` |
-| 14 | IVT Multi规则升级 | `projects/ivt-multi-rules.md` |
-| 15 | UA来源深度排查 | `projects/ua-source-investigation.md` |
-| 16 | IAB会员续费 | `projects/iab-membership.md` |
+| 5 | 布点项目 | `projects/ai-adaptation/admonitor-budian.md` |
+| 6 | AI适配建设（主线） | `projects/ai-adaptation/ai-adaptation.md` |
+| 6a | └ 多维钻取API | `projects/ai-adaptation/adm-drill/`（adm-drill-api.md + adm-drill-api-prd.md） |
+| 6b | └ API测试修复 | `projects/ai-adaptation/admonitor-api-test-fixes.md` |
+| 7 | 智屏视界 | `projects/zpsj/`（4个文件：video-verification、threshold-spec-v6、first-principles、technical-doc） |
+| 8 | Prebid MAC | `projects/platform/prebid-mac-blacklist.md` |
+| 9 | 三九×龙虾 | `projects/sanjiuagent.md`（含天网Agent SOUL） |
+| 10 | IPTV×CVB | `projects/iptv-cvb.md` |
+| 11 | CBP升级 | `projects/platform/cbp-upgrade.md` |
+| 12 | OTT实验室 | `projects/platform/ott-lab-upgrade.md` |
+| 13 | IVT Multi规则升级 | `projects/ivt/ivt-multi-rules.md` |
+| 14 | UA来源深度排查 | `projects/ivt/ua-source-investigation.md` |
+| 15 | IAB会员续费 | `projects/iab-membership.md` |
+| 16 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
 
 ---
 
@@ -214,9 +218,10 @@
 
 ## 📋 待确认 TODO
 
-- [ ] KA品牌安全：AI风险分析具体设计待深入了解
-- [ ] 三九×龙虾Agent：合同已到，7/27-7.31服务器配置+知识库调教；待确认指标开发启动情况
+- [ ] 三九×龙虾Agent：小胡review阈值和三层防御体系
+- [ ] 多维API：和技术确认鉴权是否限制内部账号（8/12 10:10提醒）
+- [ ] 多维API：界面交叉校验（by活动/网站/广告位指标）
+- [ ] 多维API：分析马杰第一轮测试反馈文档
 - [ ] Prebid MAC：M4+小米数据产出后确认阈值选择（0.4 vs 0.5）
-- [ ] IPDX×广电合作：待确认是否还需单独建项目（当前在IPTV×CVB项目下管理）
-- [ ] ZPSJ报价：带宽流量+报告计算存储费用估算，待确认曝光量数据范围
-- [ ] IPv6与OTT端切换频率：谢品端发现OTT端IPv4比IPv6切换更频繁，小胡说先想想，pending
+- [ ] ZPSJ报价：带宽流量+报告计算存储费用估算
+- [ ] vivo SDK签名：上线后验证结果待确认

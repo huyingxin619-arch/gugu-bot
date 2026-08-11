@@ -82,10 +82,12 @@
 | 2026-08-06 | **正式上线**，交付烟台业务 | ✅ 完成 |
 | TBD | 根据业务反馈持续迭代 | 🔄 |
 | 2026-08-10 | 小胡反馈三个缺口：①ADM Custom分规则指标(givttotal/sivttotal_basic/advanced/h2的imp/clk)创建任务报错但detail能正常显示；②TVM sheetBy限制与界面不一致(界面无sheetBy限制，API有)；③缺少列出历史任务/按条件查询历史任务的接口 | 🔴 待修复 |
+| 2026-08-11 | 完成固定模板 by活动/by网站/by广告位 指标差异分析（`knowledge/adm-fixed-template-metrics-comparison.md`） | ✅ 完成 |
+| 2026-08-11 | 确认应使用真实API文档（docs.cn.miaozhen.com）而非PRD文档做对比 | ✅ 确认 |
+| 2026-08-11 | 界面交叉校验因浏览器滑块问题未完成，待小胡配合截图 | ⏳ 待完成 |
+| 2026-08-11 | 马杰完成第一轮测试，有反馈文档，小胡转给古古逐条分析 | 🔄 进行中 |
+| 2026-08-11 | 发现鉴权隐患：monitor-intra-api可能未限制内部账号，外部客户可直接调API | 🔴 待确认 |
 | TBD | 修复上述两个问题并补测 | 🔄 |
-| 2026-08-06 | 天网完成v11测试交接（455case，96%通过，2个API bug已修复） | ✅ 完成 |
-| TBD | 联调测试 | ⏳ 待排 |
-| TBD | 上线 | ⏳ 待排 |
 
 ---
 
@@ -110,8 +112,9 @@
 - [ ] 确认069/073/075 token短名映射后是否通过
 - [ ] 决定4272471极限组合失败是否报技术侧查日志
 - [ ] 在群里与 AdMonitor 一起讨论技术实施风险清单
-- [ ] 联调测试安排
-- [ ] 上线后验证
+- [ ] **界面交叉校验：by活动/网站/广告位三个tab下指标显示是否与分析一致（小胡配合截图）**
+- [ ] **分析马杰第一轮测试反馈文档（小胡转给古古）**
+- [ ] **和技术确认：monitor-intra-api是否限制内部账号（8/12 10:10提醒）**
 - [ ] **报技术侧修复：ADM Custom create接口不支持分规则verify token（givttotal_imp/clk、sivttotal_basic_imp/clk、sivttotal_advanced_imp/clk、sivttotal_h2_imp/clk）——detail能返回但create报错**
 - [ ] **报技术侧修复：TVM sheetBy限制与界面不一致——界面SIVT指标可按活动/按地域分sheet无限制，API有sheetBy=0强制限制**
 - [ ] **报技术侧补接口：列出历史任务/按条件查询历史任务——当前只有status(批量查状态)+detail(单个查详情)，缺少list接口，用户无法通过API获取自己提交过哪些任务**
