@@ -39,12 +39,13 @@
 
 | 实例 | 端口 | HOME 目录 | 用途 | 默认模型 |
 |------|------|-----------|------|----------|
-| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理 | glm-5.2 |
-| **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（拉取 ADM/TVM/M+ 数据）| claude-sonnet-4-6 → 已切换 |
+| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理（项目追踪/策略分析/文档管理/跨bot协调）| glm-5.2 |
+| **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（数据执行/API拉数/全量ADM知识）| claude-sonnet-4-6 → 已切换 |
 
 - **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
 - **adm 核心能力：** 按指令通过 API 拉取广告监测数据
 - **常见问题：** MLAMP token 配额不足导致 403 报错（已记录根因）<来源: #2026-06-25>
+- **adm 备份：** 每天 2:00 scripts/backup.sh，1:55 落盘兜底（与 gugu 3:00 备份时间错开）<来源: #2026-08-12>
 
 ---
 
@@ -56,6 +57,7 @@
 - **core-evolution周度诊断**：每周日凌晨3:30扫描所有内核文件+项目结构+索引同步
   - cron ID：`7c704f9e-dcbd-48af-8808-8acc90991cc2`
   - 时间：周日 03:30 Asia/Shanghai
+- **adm Core Evolution**：被动触发（批评→诊断→改文件→git push）+ 主动触发（周日3:30 MEMORY.md全量重构）<来源: #2026-08-12>
 
 ---
 
