@@ -28,6 +28,13 @@
 - **工作目录**: `~/.openclaw-gugu/workspace-gugu`
 - **memory 目录**: `~/.openclaw-gugu/workspace-gugu/memory/`
 
+## memory_search 排查
+
+- **踩坑**: 2026-08-12，memory_search 突然不工作（搜任何词返回空或报错）
+- **根因**: `memory index --force` 重建索引时创建临时 DB → 写入 meta → swap 替换主 DB，但 gateway 进程持有旧 DB 连接，swap 后读不到新 meta。重启 gateway 后 CLI 又可能因检测到文件变化再触发一次 index，把 meta 清掉
+- **修复方法**: 不重启 gateway，直接跑 `openclaw memory index --force`，CLI 写完 meta 后不被覆盖，memory_search 即可恢复
+- **验证**: 搜 "test" 返回6条结果，向量检索和全文检索都通
+
 ---
 
 _新增工具配置写在这里，不写进 AGENTS.md 或 MEMORY.md。_
