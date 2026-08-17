@@ -25,4 +25,4 @@
 
 _(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
 
-- 在推进 KA品牌安全项目（媒体内容风险评估），详见 `ka-brand-safety.md`
+- 已完成 KA品牌安全项目（采集+交付），当前重点关注：AI适配建设（多维API已上线迭代中）、三九×龙虾Agent项目（指标模型开发中）

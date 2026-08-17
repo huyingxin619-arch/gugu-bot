@@ -40,7 +40,7 @@
 | 实例 | 端口 | HOME 目录 | 用途 | 默认模型 |
 |------|------|-----------|------|----------|
 | **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理（项目追踪/策略分析/文档管理/跨bot协调）| glm-5.2 |
-| **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（数据执行/API拉数/全量ADM知识）| claude-sonnet-4-6 → 已切换 |
+| **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（数据执行/API拉数/全量ADM知识）| tencent/glm-5.2 |
 
 - **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
 - **adm 核心能力：** 按指令通过 API 拉取广告监测数据

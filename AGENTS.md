@@ -168,13 +168,19 @@
 | Prebid/MAC黑名单 | `projects/ivt/prebid-mac-blacklist.md` |
 | 智屏视界/ZPSJ/视频像素/IEEE匹配 | `projects/zpsj/zpsj-video-verification.md` |
 | 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
-| ADM看板/Bot | `projects/admonitor-bot-dashboard.md` |
-| OTT实验室 | `projects/ott-lab-upgrade.md` |
-| CBP升级 | `projects/cbp-upgrade.md` |
+| ADM看板/Bot | `projects/ai-adaptation/admonitor-bot-dashboard.md` |
+| OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
+| CBP升级 | `projects/ivt/cbp-upgrade.md` |
 | 布点/计算链路 | `projects/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
-| TAG审计 | `projects/tag-audit.md` |
+| TAG审计 | `projects/audit/tag-audit.md` |
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
 | 秒针产品 | `miaozhen-products.md` |
 | ADM拉数 | `knowledge/adm-data-pull-sop.md` |
 | 周报/写作规范 | `memory/workflow-rules.md` |
+| vivo SDK签名 | `projects/vivo-sdk-signature.md` |
+| IVT Multi规则 | `projects/ivt/ivt-multi-rules.md` |
+| UA来源排查 | `projects/ivt/ua-source-investigation.md` |
+| IAB会员续费 | `projects/audit/iab-membership.md` |
+| AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
+| 品牌安全 | `projects/ka-brand-safety.md` |

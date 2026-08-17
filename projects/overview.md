@@ -62,7 +62,7 @@
   - 8/11 完成官方API文档全量对比（23项差异），以官方文档为准校正本地文档
   - 8/11 发现鉴权隐患：monitor-intra-api可能未限制内部账号
 - **子项目清单：** 见 `projects/ai-adaptation.md`
-- **详情：** `projects/ai-adaptation.md`（主线）/ `projects/adm-drill-api.md`（多维钻取项目管理）
+- **详情：** `projects/ai-adaptation/ai-adaptation.md`（主线）/ `projects/ai-adaptation/adm-drill/adm-drill-api.md`（多维钻取项目管理）
 
 ### 7. 智屏视界（ZPSJ）视频像素验证
 - **客户：** KA客户（宝洁）
