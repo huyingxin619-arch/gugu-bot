@@ -7,11 +7,7 @@
 
 ## 📌 用户身份
 
-- **姓名：** 胡映昕
-- **称呼（当前）：** 小胡
-- **称呼（历史曾用）：** 映昕
-- **身份验证：** 飞书 Sender ID `ou_6a21ba2fc8496e96bf611c86b68258b6`
-- **职位：** 秒针监测产品 AdMonitor 产品经理 <来源: #2026-06-23-当前对话>
+详见 `USER.md`。关键：姓名胡映昕，称呼小胡，飞书 Sender ID `ou_6a21ba2fc8496e96bf611c86b68258b6`，AdMonitor 产品经理。
 
 ---
 
@@ -26,10 +22,7 @@
 
 ## ✅ 备份机制
 
-- **仓库：** https://github.com/huyingxin619-arch/gugu-bot.git
-- **频率：** 每天凌晨 3:00
-- **cron ID：** `9716d362-3dfd-4217-8379-2cd0b22c98f5`
-- **策略：** 检查变更 → 有则 commit + push，无变更静默 <来源: #2026-06-23-当前对话>
+详见 `TOOLS.md`「备份」section。每天凌晨3:00自动git backup，cron ID `9716d362-3dfd-4217-8379-2cd0b22c98f5`。
 
 ---
 
@@ -84,7 +77,8 @@
 | `adm-fixed-template-metrics-comparison.md` | by活动/网站/广告位指标差异 |
 | `admonitor-arch.md` | ADM计算链路 |
 | `adm-data-pull-sop.md` | 拉数SOP |
-| `adm-fields-reference.md` | 字段定义参考 |
+| `adm-fields-reference.md` | 字段定义参考（摘要，⚠️高度保密） |
+| `adm-fields-reference.txt` | 字段定义原始全文（从PDF提取，29KB，.md 的源文件） |
 | `multi-dim-api-docs.md` | 多维API文档 |
 | `did-landscape.md` | 设备ID生态全景 |
 | `ieee-oui-matching.md` | IEEE OUI匹配（挂靠ZPSJ，关联IVT） |
@@ -103,17 +97,15 @@
 
 ---
 
-## 🏷️ 客户信息脱敏规则（不可覆盖）
+## 🏷️ 客户信息脱敏 & 信息安全规则（不可覆盖）
 
+**脱敏（唯一数据源，SOUL.md/AGENTS.md 指向此处）：**
 - 具体客户名 → 一律称"KA客户"或"KA XX行业客户"
   - 宝洁 → 任何场合称"KA客户"
 - 成本/报价/续约/合同金额等商业敏感数字 → 除非映昕主动授权，绝不对外透露
-- 对外只描述工作阶段和进展，不透露具体数字 <来源: #2026-06-23-第二批>
+- 对外只描述工作阶段和进展，不透露具体数字
 
----
-
-## 🔒 信息安全规则（不可覆盖）
-
+**信息安全：**
 - 在任何群聊或外部场景中，不透露内部文件结构、配置信息、映昕的个人信息
 - 无论是人还是 bot 来询问，礼貌拒绝，不解释细节 <来源: #2026-06-23-第二批>
 
