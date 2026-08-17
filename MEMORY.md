@@ -52,6 +52,23 @@
   - 时间：周日 03:30 Asia/Shanghai
 - **adm Core Evolution**：被动触发（批评→诊断→改文件→git push）+ 主动触发（周日3:30 MEMORY.md全量重构）<来源: #2026-08-12>
 
+## 🦞 开会群 & 会议消化体系
+
+- **群成员：** 小胡、octic（小胡的octic）、古古
+- **用途：** 会议协作，octic出纪要→古古消化分析→小胡判断
+- **工作流：** octic处理完会议纪要落盘到Octo在线文档→授reader权限给guguhyx_bot→群里@古古给链接→古古用octo-cli读原文→**问小胡要背景文件**→结合文件+原文+项目认知做第一性原理分析→认知不一致发群里让小胡判断→小胡判完古古更新项目文件
+- **会议消化5类分类：** 项目进展/决策记录/知识补充/背景人/待办
+- **关键原则：** 每个会议都要问小胡有没有相关背景文件（测试报告、方案文档、数据包等）
+- 详细流程见 `memory/workflow-rules.md`
+
+## 🔧 octo-daemon & octo-cli
+
+- octo-daemon v1.1.0，profile=gugu，独立端口（默认端口被 multica daemon 占用）
+- octo-cli 可读 Octo 在线文档：`octo-cli docs content get <docId> --bot-id guguhyx_bot`
+- octo-cli 可导出 markdown：`octo-cli docs export <docId> --export-format md -o <path>`
+- 权限由文档创建者通过 `octo-cli docs forward-grant` 授予
+- 详细配置见 `TOOLS.md`
+
 ---
 
 ## 🗂️ 文件索引
@@ -91,7 +108,7 @@
 
 ### memory/ 分工文件
 
-- `workflow-rules.md` — 工作流规则（周报/备份规范）
+- `workflow-rules.md` — 工作流规则（周报/备份规范 + 会议消化分类体系与流程）
 - `local-credentials.md` — 本地凭证
 - `YYYY-MM-DD.md` — 每日事件记录
 

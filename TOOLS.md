@@ -29,6 +29,30 @@
 - **工作目录**: `~/.openclaw-gugu/workspace-gugu`
 - **memory 目录**: `~/.openclaw-gugu/workspace-gugu/memory/`
 
+## octo-daemon
+
+- **版本**: v1.1.0 (darwin-arm64)
+- **用途**: 让专家通过 octo-daemon 调用 openclaw CLI，实现 Loop 子系统操作
+- **Profile**: `gugu`（与默认 profile 隔离，因默认端口 19514 被 huangchunbo 的 multica daemon 占用）
+- **启动**: `octo-daemon --profile gugu`，独立端口
+- **认证**: token 认证，server: `im.deepminer.com.cn`
+- **内置 skill**: octo-loop（已装到 gugu 和 adm 两个实例的 skills 目录）
+- **安装日期**: 2026-08-17
+
+## octo-cli 文档读取
+
+- `octo-cli docs content get <docId> --bot-id guguhyx_bot` — 读取 Octo 在线文档内容（JSON block 结构，ProseMirror/Tiptap 格式）
+- `octo-cli docs export <docId> --export-format md -o <path>` — 导出为 markdown
+- 权限: 需文档创建者通过 `octo-cli docs forward-grant` 授 reader/writer
+- guguhyx_bot 的 auth profile 已建好（`octo-cli auth login`）
+
+## Node.js 版本
+
+- **当前版本**: v24.19.0（通过 nvm 安装）
+- **系统 PATH**: `/opt/homebrew/bin/node` 是 homebrew 的 v22.22.0，不满足 octo-daemon 要求（>=22.22.3）
+- **修复**: `nvm alias default 24` 激活 v24 到默认 PATH
+- **踩坑**: 2026-08-17，专家通过 octo-daemon 调 openclaw 时报错 node v22.22.0 不满足要求。根因是 homebrew node 和 nvm node 并存，PATH 优先用了 homebrew 的旧版
+
 ## memory_search 排查
 
 - **踩坑**: 2026-08-12，memory_search 突然不工作（搜任何词返回空或报错）

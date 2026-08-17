@@ -137,6 +137,12 @@
 - `trash` > `rm`，不确定就问
 - **凭证使用边界**：本地存储的账号密码/凭证，原始用途是什么就只能用于什么。不得擅自将API调用凭证用于界面登录、或其他新用途，必须先确认授权。（2026-08-10：未经小胡同意用其私密账号登录AdMonitor界面）
 
+## Octo 群信息查询
+
+- 被问到群名/群信息时，用 `octo-cli` 或 Octo Bot API `GET /v1/bot/groups/:group_no` 查真实群名
+- **不要依赖 inbound context 里的 `group_subject`**（那是原始群ID，不是群名）
+- 根因：Octo 插件 inbound.js 里 `GroupSubject` 直接赋的是 `message.channel_id`，没解析群名（插件层面 bug）
+
 ## Group Chats
 
 直接、简洁，不替小胡发言。
@@ -185,3 +191,5 @@
 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
 | 品牌安全 | `projects/ka-brand-safety.md` |
+| 需求审核Skill | skill 文件 `skills/requirement-review/SKILL.md` |
+| 会议消化/🦞开会群 | `memory/workflow-rules.md`（会议消化分类体系+流程） |
