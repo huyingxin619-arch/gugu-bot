@@ -58,6 +58,7 @@
 6. 当基于文档/规格做设计、判断或验证时 → 先回答：有没有拿实际行为/真实数据/字段定义做交叉校验？不允许只从文档推导就下结论（2026-07-21：字段值类型判断需查定义文档 `knowledge/adm-fields-reference.md`；2026-08-10：测试case设计需拿界面实际行为做对齐校验，不能只从API文档推导case）
 7. 当即将说"做不了/没法发"时 → 先查对应工具/Skill 文档确认能力边界，不允许凭印象否定
 8. 当被问到"支持什么模型"或提到 model 相关问题时 → 先读 `~/.openclaw-gugu/openclaw.json` 配置文件，不允许凭 TOOLS.md 或记忆回答
+9. 当做对照分析、关联判断或输出结论时 → 先回答：这个关联/结论有没有经过事实确认？是否存在名称相似但实际无关的可能？是否把"多种可能"收敛成了"单一结论"？不允许基于表面特征直接关联或下确定性结论
 
 > 注：以上8条为当前清单。每次犯思维方式类错误后，提取反模式新增一条触发式自检。清单上限10条，超出时淘汰最低频项。同一自检项触发后仍犯同类错误，升级为下方硬禁令。
 >
@@ -191,5 +192,6 @@
 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
 | 品牌安全 | `projects/ka-brand-safety.md` |
+| 达能数据异常 | `projects/ivt/danone-data-anomaly.md` |
 | 需求审核Skill | skill 文件 `skills/requirement-review/SKILL.md` |
 | 会议消化/🦞开会群 | `memory/workflow-rules.md`（会议消化分类体系+流程） |

@@ -2,7 +2,7 @@
 
 > 唯一数据源。cron job「每日11点汇报」直接读取此文件生成汇报。
 > 更新规则：任何项目状态变化 → 先改对应 `projects/xxx.md` → 再同步到此文件。
-> 最后更新：2026-08-18
+> 最后更新：2026-08-19
 
 ---
 
@@ -65,6 +65,10 @@
   - 8/17 发现三处遗漏：①ADM Custom分规则指标create接口报错 ②TVM sheetBy限制与界面不一致 ③缺列出历史任务接口。根因：测试case设计锚点是API文档而非界面实际行为
   - 8/17 提出鉴权隐患：当前仅需Passport用户级JWT，不区分内外部账号
   - 8/17 读图功能修复：image model从kimi-k2.6改为kimi-k3（kimi-k2.6已下线）
+  - 8/18 P0回归验证：P0-1（N+默认值）属API设计行为文档描述不准；P0-2（byrule token生产40302）生产未部署，均未修复
+  - 8/18 补测30个byrule token（含_byrule后缀9个），结论不变；dev建包含所有byrule token的任务（taskId:4336534），与线上同配置对比195列数值完全一致
+  - 8/18 TVM sheetBy测试（BUG-02）：campaign 4144375三种sheetBy均创建成功且有SIVT数据，dev与生产一致
+  - 8/18 adm完成ADM+TVM全界面知识落盘，知识体系升级到"界面+API双层"
 - **子项目清单：** 见 `projects/ai-adaptation.md`
 - **详情：** `projects/ai-adaptation/ai-adaptation.md`（主线）/ `projects/ai-adaptation/adm-drill/adm-drill-api.md`（多维钻取项目管理）
 
@@ -137,6 +141,17 @@
 - **关键卡点：** ①湖南之前测试有问题（量对不上），内部未上线 ②等广东或广西接入后与湖南一起联调，最早8月 ③联调后需覆盖一定用户规模再压测
 - **待跟进：** ①广东/广西接入进度 ②8月联调排期 ③联调后压测 ④调度配置、实时分析模块分配
 - **详情：** `projects/iptv-cvb.md`
+
+### 17. 达能 SIVT 数据异常排查
+- **客户：** 达能
+- **负责人：** 小胡（项目管理+客户沟通）
+- **当前状态：** 🔄 进行中，古古负责项目管理
+- **核心进展：**
+  - 8/18召开排查会，4个异常问题（无曝光点击/Windows高曝光/超高频次/IP集中度）
+  - 王浩阳DMS跑数确认Windows高曝光来源于PC端cookie机制
+  - 古古完成SIVT规则配置gap分析："无曝光点击"和"IP集中度"均不在达能部署列中
+  - 核心gap：达能IVT版本/SIVT配置清单已收到，规则更新与客户配置同步流程待确认
+- **详情：** `projects/ivt/danone-data-anomaly.md`
 
 ---
 
@@ -211,6 +226,7 @@
 | 14 | UA来源深度排查 | `projects/ivt/ua-source-investigation.md` |
 | 15 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | 16 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
+| 17 | 达能SIVT数据异常 | `projects/ivt/danone-data-anomaly.md` |
 
 ---
 
@@ -242,4 +258,13 @@
 - [ ] ZPSJ：内部碰完后约Darin对齐（胡映昕）
 - [ ] ZPSJ：KP/creative ID参数催媒体确认（Stella）
 - [ ] ZPSJ：确认海信8/12批次占位符率随时间恶化原因
+- [ ] 达能：浩阳/心宇排查连续曝光规则SFTP日志标记+阈值匹配
+- [ ] 达能：高危IP是否在现有规则库（待定）
+- [ ] 达能：小红书"5秒曝光折合点击"机制需媒体澄清
+- [ ] 多维API：确认BUG-02(TVM sheetBy)是否真正修复（需小胡界面建同配置任务对比）
+- [ ] adm追小胡：Daily Alert功能细节、10个字段含义、SIVT B0/B1差异
+- [ ] PG内部：浩阳抓码测试+验证OAID一致性
+- [ ] PG内部：追Darin工程化PO+Dolores两边PO进度
+- [ ] ZPSJ抽样：邢思源与Darin沟通抽样比例和精度目标
+- [ ] ZPSJ抽样：明日下午2-3小胡/邢思源/韩丰泽对齐文档
 - [ ] vivo SDK签名：上线后验证结果待确认

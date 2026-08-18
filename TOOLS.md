@@ -60,6 +60,11 @@
 - **修复方法**: 不重启 gateway，直接跑 `openclaw memory index --force`，CLI 写完 meta 后不被覆盖，memory_search 即可恢复
 - **验证**: 搜 "test" 返回6条结果，向量检索和全文检索都通
 
+- **踩坑**: 2026-08-18，memory_search 全部 fail，报 `Unknown memory embedding provider: local`
+- **根因**: 8/17 OpenClaw 从 2026.6.1-beta.3 升级到 2026.7.1-2 后，llama-cpp-provider 插件未在 enabled 列表中，导致 `memorySearch.provider: "local"` 找不到嵌入提供方
+- **修复方法**: 在 `openclaw.json` 的 `plugins.allow` 加入 `"llama-cpp"`，`plugins.entries` 加入 `{"llama-cpp": {"enabled": true}}`，重启 gateway 后自动重建索引
+- **验证**: `openclaw memory status --deep` 显示 Embeddings: ready，搜 "test" 返回6条结果
+
 ---
 
 _新增工具配置写在这里，不写进 AGENTS.md 或 MEMORY.md。_
