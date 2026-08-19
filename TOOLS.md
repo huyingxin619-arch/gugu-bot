@@ -39,6 +39,16 @@
 - **内置 skill**: octo-loop（已装到 gugu 和 adm 两个实例的 skills 目录）
 - **安装日期**: 2026-08-17
 
+## Loop 子系统行为知识
+
+- **Loop里的专家与当前对话session是两个独立实例**：上下文不共享。专家是Loop工作区里的常驻实例，有自己的instructions和记忆；当前对话session是临时的。两者不共享对话历史或上下文
+- **Octo @通知机制**：在消息中使用 `@[uid:displayName]` 格式可以触发对特定用户的通知。例如 `@[d6455e7407db42d5b49a3b975684c910:小胡]`
+- **Spid与SpotsPlanId**：见 `knowledge/adm-fields-reference.md` 中「Spid ↔ SpotsPlanId 转换关系」
+
+## adm_pm LaunchAgent 踩坑
+
+- **双重嵌套路径bug**：adm_pm LaunchAgent 配置中存在双重嵌套路径问题（2026-08-19修复）。根因是plist中路径配置重复嵌套，导致服务无法正确启动
+
 ## octo-cli 文档读取
 
 - `octo-cli docs content get <docId> --bot-id guguhyx_bot` — 读取 Octo 在线文档内容（JSON block 结构，ProseMirror/Tiptap 格式）
