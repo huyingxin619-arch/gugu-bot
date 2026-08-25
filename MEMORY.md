@@ -105,6 +105,7 @@
 
 - **秒针产品图谱** → `miaozhen-products.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`
+- **OpenClaw API Key 更换 SOP** → `knowledge/openclaw-api-key-replacement-sop.md`
 
 ### memory/ 分工文件
 

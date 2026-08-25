@@ -3,6 +3,7 @@
 ## OpenClaw 配置
 
 - **配置文件**: `~/.openclaw-gugu/openclaw.json`
+- **API Key 更换**：手动改 JSON 里的 apiKey 不够，OpenClaw 有 auth profile 机制。必须用 CLI：`openclaw models auth paste-api-key --provider custom-llm-gateway-mlamp-cn`，然后粘贴新 key，会写入 `auth-profiles.json` 并同步 config（2026-08-25 踩坑）
 - **默认模型**: `custom-llm-gateway-mlamp-cn/tencent/glm-5.2`
 - **Gateway 端口**: 18790
 - **Profile**: gugu
