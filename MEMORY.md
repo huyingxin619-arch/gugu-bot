@@ -79,7 +79,7 @@
 
 | 目录 | 项目 | 文件 |
 |------|------|------|
-| `projects/zpsj/` | 智屏视界 | zpsj-video-verification.md、zpsj-threshold-spec-v6.md、zpsj-first-principles.md、zpsj-technical-doc.md |
+| `projects/zpsj/` | 智屏视界 | zpsj-video-verification.md、zpsj-threshold-spec-v6.md、zpsj-first-principles.md、zpsj-technical-doc.md、zpsj-sampling-plan.md |
 | `projects/ai-adaptation/` | AI适配建设（主线） | ai-adaptation.md、admonitor-bot-dashboard.md、admonitor-api-test-fixes.md、adm-drill/（adm-drill-api.md + adm-drill-api-prd.md） |
 | `projects/ivt/` | IVT全家桶 | ant-ivt-research.md、ivt-multi-rules.md、ua-source-investigation.md、prebid-mac-blacklist.md、cbp-upgrade.md、ott-lab-upgrade.md、danone-data-anomaly.md |
 | `projects/audit/` | 审计/合规 | tag-audit.md、iab-membership.md |

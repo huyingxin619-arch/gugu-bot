@@ -59,6 +59,7 @@
 7. 当即将说"做不了/没法发"时 → 先查对应工具/Skill 文档确认能力边界，不允许凭印象否定
 8. 当被问到"支持什么模型"或提到 model 相关问题时 → 先读 `~/.openclaw-gugu/openclaw.json` 配置文件，不允许凭 TOOLS.md 或记忆回答
 9. 当做对照分析、关联判断或输出结论时 → 先回答：这个关联/结论有没有经过事实确认？是否存在名称相似但实际无关的可能？是否把"多种可能"收敛成了"单一结论"？不允许基于表面特征直接关联或下确定性结论
+10. 当引用外部文本（日报、会议纪要等）中的名称/归属时 → 先回答：这个名称与已知事实（参会人身份、时间规律、项目归属）是否一致？不一致先标注再确认，不允许直接照搬原文表述
 
 > 注：以上8条为当前清单。每次犯思维方式类错误后，提取反模式新增一条触发式自检。清单上限10条，超出时淘汰最低频项。同一自检项触发后仍犯同类错误，升级为下方硬禁令。
 >
@@ -185,7 +186,7 @@
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
 | 秒针产品 | `miaozhen-products.md` |
 | ADM拉数 | `knowledge/adm-data-pull-sop.md` |
-| 周报/写作规范 | `memory/workflow-rules.md` |
+| 周报/写作规范 | `memory/workflow-rules.md` + skill 文件 `skills/weekly-report/SKILL.md` |
 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
 | IVT Multi规则 | `projects/ivt/ivt-multi-rules.md` |
 | UA来源排查 | `projects/ivt/ua-source-investigation.md` |

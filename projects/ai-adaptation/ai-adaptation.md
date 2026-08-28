@@ -132,6 +132,13 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 |          | ② 部署adm PM助手（需求梳理→PRD→Loop建issue→分发研发），已启动新会话 |
 |          | ③ 同步团队：产品给研发提需求统一通过Loop沟通，已拉好团队工作空间 |
 |          | ④ adm PM助手模型fallback链配置完成：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-sonnet-4-6 |
+| 2026-08-28 | **多维API上线后修复+M+ API需求提交：** |
+|          | ① 上线后发现三处遗漏：ADM Custom分规则指标create接口报错（待修）；TVM sheetBy限制与界面不一致（待修）；缺少列出历史任务接口（已补） |
+|          | ② 文档更新：小歪完成15项差异比对，小胡指定更新项，待吕金果团队发布 |
+|          | ③ 王浩阳负责多维skill开发，预计周五完成 |
+|          | ④ **M+ API需求已提交**（Loop issue ADM-24）：ADM M+ 5个接口 + TVM数据中心4种任务类型+PMO跨屏打通+跨屏打通CTR，期望2周完成（9/11），指派吕金果二次分配 |
+|          | ⑤ Loop工作区推广：产品给研发提需求统一用Loop沟通，研发可设专家接单 |
+|          | ⑥ adm PM助手模型fallback链配置完成：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-sonnet-4-6 |
 | TBD | 与 AdMonitor 讨论风险清单 | ⏳ |
 | TBD | P0 需求逐一确认方案和排期 | ⏳ |
 | TBD | 其他模块 API 适配现状确认（任务定制/数据中心等） | ⏳ |
