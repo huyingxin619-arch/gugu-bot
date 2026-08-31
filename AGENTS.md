@@ -194,5 +194,5 @@
 | AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
 | 品牌安全 | `projects/ka-brand-safety.md` |
 | 达能数据异常 | `projects/ivt/danone-data-anomaly.md` |
-| 需求审核Skill | skill 文件 `skills/requirement-review/SKILL.md` |
 | 会议消化/🦞开会群 | `memory/workflow-rules.md`（会议消化分类体系+流程） |
+| PG双周会/宝洁会议 | `projects/pg-biweekly.md` |
