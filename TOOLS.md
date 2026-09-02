@@ -15,6 +15,7 @@
 - **免费模型**: glm-5.2, deepseek-v4-pro, qwen3-8b, mlamp/kimi-k3 等（kimi-k2.6 已下线，已删除；mlamp/kimi-k3 新增）
 - **配额模型**: tencent/glm-5.2, tencent/kimi-k3, txds/deepseek-v4-pro, qwen3.6-plus, claude-sonnet-4-6
 - **读图模型**: `agents.defaults.imageModel` 配置为 `custom-llm-gateway-mlamp-cn/mlamp/kimi-k3`，fallback 到 `tencent/kimi-k3` → `qwen3.6-plus`
+- **统一 Fallback 链**（2026-09-02 确认，所有 AI bot 统一）：`mlamp/kimi-k3` → `qwen3.6-plus` → `mlamp/deepseek-v4-pro` → `claude-opus-4-6`。各 bot 已完成配置并重启。adm PM助手私聊session因kimi-k3超时频繁报错，已切换 `tencent/glm-5.2` 并 `/new` 重置
 
 ## 备份
 
