@@ -132,7 +132,12 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 |          | ② 部署adm PM助手（需求梳理→PRD→Loop建issue→分发研发），已启动新会话 |
 |          | ③ 同步团队：产品给研发提需求统一通过Loop沟通，已拉好团队工作空间 |
 |          | ④ adm PM助手模型fallback链配置完成：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-sonnet-4-6 |
-| 2026-09-02 | **adm PM助手通知规则重构+fallback统一配置：** |
+| 2026-09-04 | **多维API地域字典问题+测试环境协调：** |
+|          | ① 确认ADM地域字典不完整：OpenAPI返回251个 vs 多维钻取全量337个，缺失86个；已提bug ADM-43，拆分子任务ADM-44后端修复 |
+|          | ② 对比ADM/TVM地域编码差异：ADM为24位英文编码（251个），TVM为10位国标中文编码（381个），两边体系独立不可混用 |
+|          | ③ 测试环境协调：OTT端除CTR和媒体自传外均有测试环境，吴坤城将部署测试流；ADM端需与于长亮确认新API测试环境 |
+|          | ④ 马杰反馈多维API测试问题：确认P0/P1优先级分类，文档与实测不符、跨端不一致、参数语义不清等问题随迭代更新 |
+|          | ⑤ ADM Bot运营：纠正OTT overlap问题回答（厂商间overlap=0正常），确认MAC加密方式（标准去冒号大写MD5，存在小写/保留冒号变体） |
 |          | ① 通知规则从"按创建人+来源群"改为"按实际需求人+原渠道"，完成6处更新（AGENTS.md/distribution-log.md/cron job/MEMORY.md/Loop专家instructions），老issue跳过回填 |
 |          | ② adm PM助手私聊session因kimi-k3超时频繁报错，切换tencent/glm-5.2并/new重置恢复 |
 |          | ③ 所有AI bot统一fallback链：mlamp/kimi-k3 → qwen3.6-plus → mlamp/deepseek-v4-pro → claude-opus-4-6，各bot已完成配置并重启 |
