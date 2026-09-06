@@ -50,7 +50,7 @@
 - **core-evolution周度诊断**：每周日凌晨3:30扫描所有内核文件+项目结构+索引同步
   - cron ID：`7c704f9e-dcbd-48af-8808-8acc90991cc2`
   - 时间：周日 03:30 Asia/Shanghai
-- **adm Core Evolution**：被动触发（批评→诊断→改文件→git push）+ 主动触发（周日3:30 MEMORY.md全量重构）<来源: #2026-08-12>
+- **adm Core Evolution**：adm 实例自身行为，非本实例 cron（被动触发：批评→诊断→改文件→git push）<来源: #2026-08-12>
 
 ## 🦞 开会群 & 会议消化体系
 
@@ -75,15 +75,16 @@
 
 ### 项目（projects/）
 
-项目状态总览见 **`projects/overview.md`**（唯一数据源）。
+项目状态总览见 **`projects/overview.md`**（唯一数据源）。MEMORY.md 只保留目录级摘要，详细文件列表见 overview.md。
 
-| 目录 | 项目 | 文件 |
-|------|------|------|
-| `projects/zpsj/` | 智屏视界 | zpsj-video-verification.md、zpsj-threshold-spec-v6.md、zpsj-first-principles.md、zpsj-technical-doc.md、zpsj-sampling-plan.md |
-| `projects/ai-adaptation/` | AI适配建设（主线） | ai-adaptation.md、admonitor-bot-dashboard.md、admonitor-api-test-fixes.md、adm-drill/（adm-drill-api.md + adm-drill-api-prd.md） |
-| `projects/ivt/` | IVT全家桶 | ant-ivt-research.md、ivt-multi-rules.md、ua-source-investigation.md、prebid-mac-blacklist.md、cbp-upgrade.md、ott-lab-upgrade.md、danone-data-anomaly.md |
-| `projects/audit/` | 审计/合规 | tag-audit.md、iab-membership.md |
-| `projects/` | 独立项目 | admonitor-budian.md（布点）、iptv-cvb.md（IPTV×CVB）、ka-brand-safety.md（品牌安全）、sanjiuagent.md（三九×龙虾，含天网Agent SOUL）、vivo-sdk-signature.md（vivo SDK签名）、pg-biweekly.md（PG双周会追踪） |
+| 目录 | 项目领域 |
+|------|----------|
+| `projects/zpsj/` | 智屏视界（5个文件） |
+| `projects/ai-adaptation/` | AI适配建设（含多维钻取、API测试修复、看板） |
+| `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则/UA排查/达能） |
+| `projects/audit/` | 审计/合规（IAB会员续费） |
+| `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计） |
+| `projects/` 根 | 独立项目（布点/IPTV-CVB/三九/vivo/PG双周会/YUM成本评估） |
 
 ### 知识库（knowledge/）
 
@@ -103,7 +104,7 @@
 
 ### 其他索引
 
-- **秒针产品图谱** → `miaozhen-products.md`
+- **秒针产品图谱** → `knowledge/miaozhen-products.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`
 - **OpenClaw API Key 更换 SOP** → `knowledge/openclaw-api-key-replacement-sop.md`
 
@@ -111,7 +112,9 @@
 
 - `workflow-rules.md` — 工作流规则（周报/备份规范 + 会议消化分类体系与流程）
 - `local-credentials.md` — 本地凭证
+- `pending-confirmations.md` — 待确认事项
 - `YYYY-MM-DD.md` — 每日事件记录
+- `周报-2026-08-21.md` — 周报归档（一次性产出）
 
 ---
 

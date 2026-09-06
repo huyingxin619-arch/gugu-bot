@@ -70,7 +70,7 @@
   - 8/28 上线后发现三处遗漏：ADM Custom分规则指标create接口报错（待修）；TVM sheetBy限制与界面不一致（待修）；缺少列出历史任务接口（已补）
   - 8/28 王浩阳负责多维skill开发，预计周五完成
   - 8/28 Loop工作区推广：产品给研发提需求统一用Loop沟通
-  - 8/28 adm PM助手上线（需求梳理→PRD→Loop建issue→分发研发），fallback链：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-sonnet-4-6
+  - 8/28 adm PM助手上线（需求梳理→PRD→Loop建issue→分发研发），fallback链：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-opus-4-6
   - ✅ 9/4 ADM地域字典不完整确认：OpenAPI返回251个 vs 多维钻取全量337个，缺失86个；已提bug ADM-43，拆分子任务ADM-44后端修复
   - ✅ 9/4 ADM/TVM地域编码差异确认：ADM为24位英文编码（251个），TVM为10位国标中文编码（381个），两边体系独立不可混用
   - ✅ 9/4 马杰反馈多维API测试问题：P0/P1优先级分类，文档与实测不符、跨端不一致、参数语义不清等问题随迭代更新
@@ -260,9 +260,9 @@
 
 | # | 项目名 | 文件路径 |
 |---|--------|----------|
-| 1 | KA品牌安全 | `projects/ka-brand-safety.md` |
-| 2 | 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
-| 3 | TAG审计 | `projects/audit/tag-audit.md` |
+| 1 | KA品牌安全（已归档） | `projects/archived/ka-brand-safety.md` |
+| 2 | 蚂蚁IVT（已归档） | `projects/archived/ant-ivt-research.md` |
+| 3 | TAG审计（已归档） | `projects/archived/tag-audit.md` |
 | 4 | ADM龙虾看板 | `projects/ai-adaptation/admonitor-bot-dashboard.md` |
 | 5 | 布点项目 | `projects/admonitor-budian.md` |
 | 6 | AI适配建设（主线） | `projects/ai-adaptation/ai-adaptation.md` |
@@ -280,6 +280,7 @@
 | 16 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
 | 17 | 达能SIVT数据异常 | `projects/ivt/danone-data-anomaly.md` |
 | 18 | PG双周会追踪 | `projects/pg-biweekly.md` |
+| 19 | YUM成本核算与私有化评估 | `projects/yum-cost-assessment.md` |
 
 ---
 

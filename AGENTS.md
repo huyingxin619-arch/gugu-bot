@@ -177,15 +177,15 @@
 |------|---------|
 | Prebid/MAC黑名单 | `projects/ivt/prebid-mac-blacklist.md` |
 | 智屏视界/ZPSJ/视频像素/IEEE匹配 | `projects/zpsj/zpsj-video-verification.md` |
-| 蚂蚁IVT | `projects/ivt/ant-ivt-research.md` |
+| 蚂蚁IVT（已归档） | `projects/archived/ant-ivt-research.md` |
 | ADM看板/Bot | `projects/ai-adaptation/admonitor-bot-dashboard.md` |
 | OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
 | CBP升级 | `projects/ivt/cbp-upgrade.md` |
 | 布点/计算链路 | `projects/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
-| TAG审计 | `projects/audit/tag-audit.md` |
+| TAG审计（已归档） | `projects/archived/tag-audit.md` |
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
-| 秒针产品 | `miaozhen-products.md` |
+| 秒针产品 | `knowledge/miaozhen-products.md` |
 | ADM拉数 | `knowledge/adm-data-pull-sop.md` |
 | 周报/写作规范 | `memory/workflow-rules.md` + skill 文件 `skills/weekly-report/SKILL.md` |
 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
@@ -193,7 +193,7 @@
 | UA来源排查 | `projects/ivt/ua-source-investigation.md` |
 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
-| 品牌安全 | `projects/ka-brand-safety.md` |
+| 品牌安全（已归档） | `projects/archived/ka-brand-safety.md` |
 | 达能数据异常 | `projects/ivt/danone-data-anomaly.md` |
 | 会议消化/🦞开会群 | `memory/workflow-rules.md`（会议消化分类体系+流程） |
 | PG双周会/宝洁会议 | `projects/pg-biweekly.md` |
