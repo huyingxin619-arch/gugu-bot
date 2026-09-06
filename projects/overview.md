@@ -2,7 +2,7 @@
 
 > 唯一数据源。cron job「每日11点汇报」直接读取此文件生成汇报。
 > 更新规则：任何项目状态变化 → 先改对应 `projects/xxx.md` → 再同步到此文件。
-> 最后更新：2026-09-05（9.4日报落盘+overview同步）
+> 最后更新：2026-09-07（路径修正：5个归档项目详情路径同步到archived/目录）
 
 ---
 
@@ -14,14 +14,14 @@
 - **当前状态：** ✅ **已结束**（采集完成，素材已交付业务团队，业务团队已完成打标交付客户）
 - **核心进展：** 5种采集形式开发完成，12媒体样本采集结束，素材清单Excel已交付，业务团队已完成打标并交付客户
 - **资产沉淀：** 采集程序可复用，参数已验证
-- **详情：** `projects/ka-brand-safety.md`
+- **详情：** `projects/archived/ka-brand-safety.md`
 
 ### 2. 蚂蚁集团-支付宝 IVT 合作研究
 - **客户：** 内部研究项目
 - **负责人：** 小胡
 - **当前状态：** ✅ **已收尾**
 - **核心结论：** 正负样本区分度不明显，数据可用性有限，不满足作为IVT补充数据源的条件
-- **详情：** `projects/ivt/ant-ivt-research.md`
+- **详情：** `projects/archived/ant-ivt-research.md`
 
 ### 3. TAG审计
 - **负责人：** 小胡（跟踪）
@@ -33,13 +33,13 @@
 - **负责人：** 小胡
 - **当前状态：** ✅ **已收尾**
 - **核心进展：** 已部署内网 `admonitor-test.cn.miaozhen.com/lobdashboard/`
-- **详情：** `projects/ai-adaptation/admonitor-bot-dashboard.md`
+- **详情：** `projects/archived/admonitor-bot-dashboard.md`
 
 ### 4b. vivo SDK签名校验
 - **负责人：** 思源（前端）
 - **当前状态：** ✅ **已上线**（2026-08-01）
 - **核心进展：** VIVO媒体要求SDK上报数据增加签名校验，8/1上线，占比>98%，签名校验<1%，安卓17版本8月底发版，9/10三方联调
-- **详情：** `projects/vivo-sdk-signature.md`
+- **详情：** `projects/archived/vivo-sdk-signature.md`
 
 ### 5. 布点项目
 - **负责人：** 小胡
@@ -186,7 +186,7 @@
   - 8/26 Colin跟进合规后代理事宜，涉及设备机型与媒体反馈不一致（OPPO活动下出现非OPPO机型数据）
   - 8/28 Colin继续跟进，关甜甜询问腾讯/爱奇艺机型问题
   - ✅ 9/4 安排邢思源将达能群人员加入DMS项目，便于后续排查协作
-- **详情：** `projects/ivt/danone-data-anomaly.md`
+- **详情：** `projects/archived/danone-data-anomaly.md`
 
 ---
 
@@ -231,7 +231,7 @@
   - 7/28：确认 SDK 不主动采集 UA；芒果 3668 次 PC 曝光 UA 含 Windows NT 特征；王立涛判断 UA 被篡改但签名校验未检出；rawlog 验证中
   - **7/28 深夜数据分析（古古+adm）：** 3147条9个月数据交叉分析，确认伪造链路——盗用真设备ID+构造SDK请求+Windows UA伪装。8条独立证据，含142个虚拟设备身份池、机房IP段、同ID双UA等
   - 7/29：md 字段确认由 SDK 原生 API 直接采集（与 UA 无关），证实伪造链路成立；Terran IP 加密机制确认可逆；文菁比对收数服务器日志 UA vs 监测上报 UA 中
-- **详情：** `projects/ivt/ua-source-investigation.md`
+- **详情：** `projects/archived/ua-source-investigation.md`
 
 ### 15. IAB 会员续费
 - **负责人：** 小胡
