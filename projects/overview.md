@@ -263,7 +263,7 @@
 | 1 | KA品牌安全（已归档） | `projects/archived/ka-brand-safety.md` |
 | 2 | 蚂蚁IVT（已归档） | `projects/archived/ant-ivt-research.md` |
 | 3 | TAG审计（已归档） | `projects/archived/tag-audit.md` |
-| 4 | ADM龙虾看板 | `projects/ai-adaptation/admonitor-bot-dashboard.md` |
+| 4 | ADM龙虾看板（已归档） | `projects/archived/admonitor-bot-dashboard.md` |
 | 5 | 布点项目 | `projects/admonitor-budian.md` |
 | 6 | AI适配建设（主线） | `projects/ai-adaptation/ai-adaptation.md` |
 | 6a | └ 多维钻取API | `projects/ai-adaptation/adm-drill/`（adm-drill-api.md + adm-drill-api-prd.md） |
@@ -275,10 +275,10 @@
 | 11 | CBP升级 | `projects/ivt/cbp-upgrade.md` |
 | 12 | OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
 | 13 | IVT Multi规则升级 | `projects/ivt/ivt-multi-rules.md` |
-| 14 | UA来源深度排查 | `projects/ivt/ua-source-investigation.md` |
+| 14 | UA来源深度排查（已归档） | `projects/archived/ua-source-investigation.md` |
 | 15 | IAB会员续费 | `projects/audit/iab-membership.md` |
-| 16 | vivo SDK签名 | `projects/vivo-sdk-signature.md` |
-| 17 | 达能SIVT数据异常 | `projects/ivt/danone-data-anomaly.md` |
+| 16 | vivo SDK签名（已归档） | `projects/archived/vivo-sdk-signature.md` |
+| 17 | 达能SIVT数据异常（已归档） | `projects/archived/danone-data-anomaly.md` |
 | 18 | PG双周会追踪 | `projects/pg-biweekly.md` |
 | 19 | YUM成本核算与私有化评估 | `projects/yum-cost-assessment.md` |
 
