@@ -81,9 +81,9 @@
 |------|----------|
 | `projects/zpsj/` | 智屏视界（5个文件） |
 | `projects/ai-adaptation/` | AI适配建设（含多维钻取、API测试修复、看板） |
-| `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则/UA排查/达能） |
+| `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则） |
 | `projects/audit/` | 审计/合规（IAB会员续费） |
-| `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计） |
+| `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计/ADM龙虾看板/达能/UA来源排查/vivo SDK签名） |
 | `projects/` 根 | 独立项目（布点/IPTV-CVB/三九/vivo/PG双周会/YUM成本评估） |
 
 ### 知识库（knowledge/）
@@ -101,6 +101,7 @@
 | `did-landscape.md` | 设备ID生态全景 |
 | `ieee-oui-matching.md` | IEEE OUI匹配（挂靠ZPSJ，关联IVT） |
 | `ipv6-training.md` | IPv6培训笔记（隐私扩展地址轮换） |
+| `cbp-report-process.md` | CBP报告流程（4类报告） |
 
 ### 其他索引
 

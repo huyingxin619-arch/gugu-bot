@@ -206,3 +206,6 @@
 | 达能数据异常（已归档） | `projects/archived/danone-data-anomaly.md` |
 | 会议消化/🦞开会群 | `memory/workflow-rules.md`（会议消化分类体系+流程） |
 | PG双周会/宝洁会议 | `projects/pg-biweekly.md` |
+| 芒果TV像素监测 | `projects/mango-ott-pixel.md` |
+| YUM/成本核算 | `projects/yum-cost-assessment.md` |
+| CBP报告流程 | `knowledge/cbp-report-process.md` |
