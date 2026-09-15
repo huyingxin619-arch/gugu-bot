@@ -143,6 +143,16 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 |          | ③ 所有AI bot统一fallback链：mlamp/kimi-k3 → qwen3.6-plus → mlamp/deepseek-v4-pro → claude-opus-4-6，各bot已完成配置并重启 |
 |          | ④ AdMonitor知识库安全治理：PG信息脱敏事故处理，所有"PG"改"KA"+物理隔离+输出脱敏规则+每日凌晨脱敏检查定时任务 |
 |          | 待办：监控新通知规则运行效果；排查fallback未触发问题 |
+## 2026-09-14 M+接口测试协调与TVM批量测试
+
+- **M+测试分工**：PMO(吴济)、CTR(关甜甜)、TA数据(邢思源)、基础数据(王浩阳)、批量(小胡)、权限(王心宇)
+- **M+测试环境**：ADM M+测试环境taskid需从4000000开始（与线上40万区分），需黄春波改代码
+- **API文档更新**：小歪补充§9.3 Panel查询指引（AdMonitor/TVMonitor接口）
+- **TA标签值**：自定义TA标签直接填中文，无完整枚举表需查`st_resource`表
+- **邢思源反馈**：M+创建任务spid_str长度限制≤64字符
+- **TVM批量任务接口测试**（adm测试助手）：`POST /tvmonitor/datacenter/bulkconfirm`+customdata读取族，用例从135扩充至161个，覆盖正向/反向/组合/TA/权限/限流/界面回显。在线文档已创建
+- **海外收数方案评估**（与Stella）：海外版ADM多年不更新IVT/TA不可用，结论海外版需重新对接单次项目不划算，大陆版再评估
+
 ## 2026-09-01 AI适配建设进展
 
 ### adm PM助手：Loop issue主动通知机制
