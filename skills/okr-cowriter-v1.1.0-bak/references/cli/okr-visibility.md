@@ -37,8 +37,7 @@
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/objectives/6001/visibility' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -108,14 +107,12 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/objectives/6001/visibility' \
 # 设置O为全员可见
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/visibility' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"visibilityType":"ALL"}'
 
 # 设置O为仅汇报线+指定人员可见
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/visibility' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"visibilityType":"REPORT_LINE_AND_SPECIFIED","specifiedEmployeeIds":["zhangsan","lisi"]}'
 ```
@@ -159,8 +156,7 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/visibility' \
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/key-results/7001/visibility' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 ---
@@ -205,7 +201,6 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/key-results/7001/visibility' \
 ```bash
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/visibility' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"visibilityType":"ALL"}'
 ```
@@ -264,7 +259,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/visibility' \
 # 保存外部锚定信息（执行型KR）
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/external-anchor' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "anchorMethod": "BENCHMARK_EXTERNAL",
@@ -277,7 +271,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/external-anch
 # 保存外部锚定信息（探索型KR，含额外字段）
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7002/external-anchor' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "anchorMethod": "BENCHMARK_ANALOGY",

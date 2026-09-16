@@ -48,8 +48,7 @@
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/plan-details' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
@@ -135,8 +134,7 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/plan-details' \
 ```bash
 # 查询张三在2025年7月、周期10下的planDetailId
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan/plan-detail?year=2025&month=7&periodId=10' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -195,8 +193,7 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan/plan-detail
 ```bash
 # 搜索名字含"张"的员工
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/search?keyword=张' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -249,12 +246,11 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/search?keyword=张' 
 ```bash
 # 获取当前登录用户的上级链
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/me/superiors' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
+  -H "Authorization: Bearer $TOKEN"
+
 # 获取指定员工的上级链
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhaobinquan/superiors' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -306,12 +302,11 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhaobinquan/superior
 ```bash
 # 获取当前登录用户的直接下级
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/me/direct-reports' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
+  -H "Authorization: Bearer $TOKEN"
+
 # 获取张三的直接下级
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan/direct-reports' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -324,57 +319,5 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan/direct-repo
     {"employeeId": "zhaoliu", "employeeName": "赵六", "departmentName": "技术部-后端组"}
   ],
   "timestamp": "..."
-}
-```
-
----
-
-## 获取我的空间列表（含当前空间）
-
-**方法+路径**：GET /api/v1/auth/me
-
-**功能**：获取当前登录用户信息，包含所属空间列表和当前默认空间。CLI 脚本在 token 探活时自动调用此接口获取空间信息，Agent 一般不需要手动调用，但了解返回的空间字段有助于多空间场景处理。
-
-**认证**：必须（白名单接口，不需要 X-Space-Id）
-
-**路径参数**：无
-
-**Query 参数**：无
-
-**请求体**：无
-
-**成功响应 data 中空间相关字段**：
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| currentSpaceId | Long | 当前默认/上次使用的空间ID |
-| currentSpaceName | String | 当前空间名称 |
-| spaces | Array | 所属空间列表 |
-
-**spaces 数组每项字段**：
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| spaceId | Long | 空间ID |
-| spaceCode | String | 空间编码 |
-| spaceName | String | 空间名称 |
-| isDefault | Boolean | 是否为默认空间 |
-| dataSource | String | 数据来源 |
-
-**成功响应示例（空间部分）**：
-```json
-{
-  "code": 20000,
-  "data": {
-    "id": 1,
-    "employeeCode": "zhaobinquan",
-    "employeeName": "赵斌权",
-    "currentSpaceId": 1,
-    "currentSpaceName": "默认空间",
-    "spaces": [
-      {"spaceId": 1, "spaceCode": "DEFAULT", "spaceName": "默认空间", "isDefault": true, "dataSource": null},
-      {"spaceId": 2, "spaceCode": "SUBSIDIARY", "spaceName": "子公司A", "isDefault": false, "dataSource": null}
-    ]
-  }
 }
 ```

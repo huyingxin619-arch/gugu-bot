@@ -76,8 +76,7 @@
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/5001/comments?page=1&pageSize=20' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
@@ -176,7 +175,6 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/5001/comments?page=1&pageSize=
 # 发表顶级评论，并@张三
 curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/comments' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "@张三 请关注一下这个KR的进度",
@@ -186,7 +184,6 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/comments' \
 # 回复评论
 curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/comments' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "content": "收到，已经在处理了",
@@ -243,8 +240,7 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/comments' \
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/5001/comments/count' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：

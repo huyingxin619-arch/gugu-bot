@@ -1,13 +1,12 @@
-# PMS OKR CLI - PowerShell 版本（Windows 原生支持）- 生产环境 v1.3.1（支持空间维度）
+# PMS OKR CLI - PowerShell 版本（Windows 原生支持）- 生产环境
 # 用法:
 #   .\call.ps1 METHOD PATH [BODY_JSON] [TOKEN]
 #
 # 环境变量:
 #   $env:PMS_BASE_URL    服务地址（默认 https://comark.stfile.com）
-#   $env:PMS_CONFIG_DIR  配置目录（默认 ~/.okr-cowriter）
+#   $env:PMS_CONFIG_DIR  配置目录（默认 ~/.pms-okr-cli-prd）
 #   $env:PMS_TOKEN_CACHE Token缓存文件
 #   $env:PMS_CAS_TOKEN   CAS Token
-#   $env:PMS_SPACE_ID    指定操作空间ID（多空间时必须）
 
 
 param(
@@ -20,22 +19,20 @@ param(
 $ErrorActionPreference = "Stop"
 
 # ========== 常量 ==========
-$script:SkillId = "okr-cowriter"
-$script:SkillVersion = "1.3.1"
+$script:SkillId = "pms-okr-cli-prd"
+$script:SkillVersion = "1.0.0"
 $script:DefaultBaseUrl = "https://comark.stfile.com"
 
-# 不需要 X-Space-Id 的白名单路径前缀
-$script:SpaceWhitelist = @(
-    "/api/v1/auth/",
-    "/api/v1/spaces/my"
-)
 
 # ========== 路径 ==========
 $HomeDir = [Environment]::GetFolderPath("UserProfile")
-$ConfigDir = if ($env:PMS_CONFIG_DIR) { $env:PMS_CONFIG_DIR } else { Join-Path $HomeDir ".okr-cowriter" }
+$ConfigDir = if ($env:PMS_CONFIG_DIR) { $env:PMS_CONFIG_DIR } else { Join-Path $HomeDir ".pms-okr-cli-prd" }
 $ConfigFile = Join-Path $ConfigDir "config.json"
-$DefaultTokenCache = Join-Path ([System.IO.Path]::GetTempPath()) "okr-cowriter-token.json"
+# 统一 token 缓存路径（与 call.js 对齐）：跨平台使用 TEMP 目录下的 JSON 文件，格式 {mode,user,token}
+$DefaultTokenCache = Join-Path ([System.IO.Path]::GetTempPath()) "pms-token-prd.json"
 $TokenCache = if ($env:PMS_TOKEN_CACHE) { $env:PMS_TOKEN_CACHE } else { $DefaultTokenCache }
+
+
 
 # ========== 工具函数 ==========
 function Write-Color($Text, [ConsoleColor]$Color = [ConsoleColor]::Gray) {
@@ -60,6 +57,7 @@ function Load-Config {
 
 $cfg = Load-Config
 
+
 $BaseUrl = if ($env:PMS_BASE_URL) { $env:PMS_BASE_URL } elseif ($cfg.baseUrl) { $cfg.baseUrl } else { $script:DefaultBaseUrl }
 
 function JGet($JsonStr, $Key) {
@@ -75,13 +73,6 @@ function JGet($JsonStr, $Key) {
         if ($null -eq $cur) { return "" }
         return "$cur"
     } catch { return "" }
-}
-
-function Test-SpaceWhitelist($UriPath) {
-    foreach ($prefix in $script:SpaceWhitelist) {
-        if ($UriPath.StartsWith($prefix)) { return $true }
-    }
-    return $false
 }
 
 function Http-Request($Method, $Url, $BodyText = "", $Headers = @{}, $TimeoutSec = 30) {
@@ -104,6 +95,7 @@ function Http-Request($Method, $Url, $BodyText = "", $Headers = @{}, $TimeoutSec
             $respText = $resp.Content
             $statusCode = [int]$resp.StatusCode
         }
+        # 返回原始响应文本 + httpStatus（内部使用，输出前剥离）
         $resultObj = [pscustomobject]@{
             __rawText = $respText
             httpStatus = $statusCode
@@ -137,11 +129,12 @@ function Load-Cache {
 function Save-Cache($Data) {
     $json = $Data | ConvertTo-Json -Compress
     $json | Out-File -FilePath $TokenCache -Encoding UTF8 -NoNewline
-    try { chmod 600 $TokenCache 2>$null } catch {}
+    try {
+        if ($IsWindows -or (-not (Get-Variable -Name IsMacOS -ErrorAction SilentlyContinue)) -or $IsMacOS -or $IsLinux) {
+            chmod 600 $TokenCache 2>$null
+        }
+    } catch {}
 }
-
-# ========== 全局：缓存 /api/v1/auth/me 响应 ==========
-$script:MeResp = $null
 
 # ========== 登录 ==========
 function Login-Cas($CasToken = "") {
@@ -173,83 +166,13 @@ function Get-Token {
         try {
             $chkText = Http-Request "GET" "$BaseUrl/api/v1/auth/me" "" @{ "Authorization" = "Bearer $($cached.token)" } 10
             $chkCode = JGet $chkText "code"
-            if ($chkCode -eq "20000") {
-                # 缓存 me 响应供空间解析使用
-                $innerChk = $chkText | ConvertFrom-Json
-                $script:MeResp = $innerChk.__rawText
-                return $cached.token
-            }
+            if ($chkCode -eq "20000") { return $cached.token }
         } catch {}
         Write-Color "[auth] 缓存token已失效，重新登录..." Yellow
     } else {
         Write-Color "[auth] 未找到缓存token，开始登录..." Yellow
     }
-    $newToken = Login-Cas
-    # 登录后获取用户信息（含空间列表）
-    try {
-        $meText = Http-Request "GET" "$BaseUrl/api/v1/auth/me" "" @{ "Authorization" = "Bearer $newToken" } 10
-        $meCode = JGet $meText "code"
-        if ($meCode -eq "20000") {
-            $innerMe = $meText | ConvertFrom-Json
-            $script:MeResp = $innerMe.__rawText
-        }
-    } catch {}
-    return $newToken
-}
-
-# ========== 解析 SpaceId ==========
-function Resolve-SpaceId($UriPath) {
-    if (Test-SpaceWhitelist $UriPath) { return $null }
-
-    # 1. 环境变量
-    if ($env:PMS_SPACE_ID) { return [string]$env:PMS_SPACE_ID }
-
-    # 2. 配置文件
-    if ($cfg.spaceId) { return [string]$cfg.spaceId }
-
-    # 3. 从 /api/v1/auth/me 响应获取
-    if (-not [string]::IsNullOrEmpty($script:MeResp)) {
-        try {
-            $meObj = $script:MeResp | ConvertFrom-Json -ErrorAction Stop
-            $spaces = @($meObj.data.spaces)
-            $currentSpaceId = $meObj.data.currentSpaceId
-
-            if ($spaces.Count -eq 0) {
-                Write-Color "您当前不属于任何空间，请联系管理员" Red; exit 1
-            }
-
-            if ($spaces.Count -eq 1) {
-                return [string]$spaces[0].spaceId
-            }
-
-            # 多空间：检查 currentSpaceId
-            if ($null -ne $currentSpaceId -and "" -ne "$currentSpaceId") {
-                $found = $false
-                foreach ($s in $spaces) {
-                    if ([string]$s.spaceId -eq [string]$currentSpaceId) { $found = $true; break }
-                }
-                if ($found) { return [string]$currentSpaceId }
-            }
-
-            # 多空间且无默认 → 提示选择
-            Write-Color "您属于多个空间，请指定要操作的空间：" Red
-            $i = 1
-            foreach ($s in $spaces) {
-                Write-Color "  $i. $($s.spaceName) (spaceId=$($s.spaceId))" Red
-                $i++
-            }
-            Write-Color ""
-            Write-Color "解决方式：" Yellow
-            Write-Color "  1. 在 $ConfigFile 中添加 `"spaceId`": <ID> 字段" Yellow
-            Write-Color "  2. 设置环境变量 `$env:PMS_SPACE_ID=<ID>" Yellow
-            Write-Color "  3. 告诉 AI agent 你要操作哪个空间，agent 会帮你配置" Yellow
-            exit 2
-        } catch {
-            Write-Color "[space] 解析空间信息失败: $_" Yellow
-        }
-    }
-
-    return $null
+    return (Login-Cas)
 }
 
 # ========== 从 JWT 解出工号/用户ID/姓名 ==========
@@ -273,6 +196,16 @@ function Decode-JwtClaims($Token) {
     return $result
 }
 
+# 生成32位无横线UUID（v4）
+
+# ========== 脱敏 ==========
+
+
+
+
+
+
+
 # ========== 参数校验 ==========
 if ([string]::IsNullOrEmpty($Method) -or [string]::IsNullOrEmpty($PathArg)) {
     Write-Host @"
@@ -280,9 +213,6 @@ if ([string]::IsNullOrEmpty($Method) -or [string]::IsNullOrEmpty($PathArg)) {
   METHOD     HTTP方法: GET/POST/PUT/DELETE
   PATH       API路径
   BODY_JSON  请求体JSON（POST/PUT时）
-
-环境变量:
-  PMS_SPACE_ID   指定操作空间ID（多空间时必须）
 "@
     exit 1
 }
@@ -290,16 +220,16 @@ $Method = $Method.ToUpper()
 if ($Method -notin @("GET","POST","PUT","DELETE")) { Write-Color "不支持的HTTP方法 $Method" Red; exit 1 }
 
 $StartTime = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+$StartIso = [DateTime]::UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")
 $Token = Get-Token
-$SpaceId = Resolve-SpaceId $PathArg
 $Jwt = Decode-JwtClaims $Token
 $EmpCode = if ($Jwt.employeeCode) { $Jwt.employeeCode } else { "unknown" }
 $UserId = if ($Jwt.userId) { $Jwt.userId } else { $EmpCode }
 $UserName = if ($Jwt.userName) { $Jwt.userName } else { $EmpCode }
 
-$spaceLabel = if ($SpaceId) { " [spaceId=$SpaceId]" } else { "" }
-Write-Color "[$Method] $BaseUrl$PathArg$spaceLabel" Cyan
+Write-Color "[$Method] $BaseUrl$PathArg" Cyan
 if (-not [string]::IsNullOrEmpty($Body)) {
+    # 打印 Body 时脱敏敏感字段（密码/token）
     $safePrintBody = $Body
     try {
         $pObj = $Body | ConvertFrom-Json -ErrorAction Stop
@@ -314,8 +244,6 @@ if (-not [string]::IsNullOrEmpty($Body)) {
 }
 
 $headers = @{ "Authorization" = "Bearer $Token" }
-if ($SpaceId) { $headers["X-Space-Id"] = $SpaceId }
-
 $CurlExit = 0
 $httpStatus = 0
 $rawBodyText = ""
@@ -325,10 +253,12 @@ try {
     $innerResp = Http-Request $Method "$BaseUrl$PathArg" $bodyArg $headers 60 | ConvertFrom-Json
     $httpStatus = [int]$innerResp.httpStatus
     $rawBodyText = [string]$innerResp.__rawText
+    # 尝试把原始响应当JSON解析用于code/message提取
     try {
         $null = $rawBodyText | ConvertFrom-Json -ErrorAction Stop
         $respText = $rawBodyText
     } catch {
+        # 非JSON响应，构造包装
         $respText = (@{code=([int]$httpStatus); message=$rawBodyText} | ConvertTo-Json -Compress)
     }
 } catch {
@@ -339,25 +269,19 @@ try {
 $EndTime = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
 $Duration = [int]($EndTime - $StartTime)
 $Code = JGet $respText "code"
+$Message = JGet $respText "message"
 
-if ($Code -eq "20000") {
-    Write-Color "[20000] success ($($Duration)ms)" Green
-} else {
-    Write-Color "[$Code] 请求失败 ($($Duration)ms)" Red
-    # 空间相关错误码友好提示
-    if ($Code -eq "40013") { Write-Color "提示：该接口需要指定空间，请检查 X-Space-Id Header" Yellow }
-    elseif ($Code -eq "40014") { Write-Color "提示：您无权访问当前空间，请检查 spaceId 配置" Yellow }
-    elseif ($Code -eq "40017") { Write-Color "提示：当前空间已停用，请切换其他空间" Yellow }
-}
+if ($Code -eq "20000") { Write-Color "[20000] success ($($Duration)ms)" Green }
+else { Write-Color "[$Code] 请求失败 ($($Duration)ms)" Red }
 
-# 输出原始服务端响应
+# 输出原始服务端响应，不附加内部字段
 if (-not [string]::IsNullOrEmpty($rawBodyText)) {
     try { $rawBodyText | ConvertFrom-Json | ConvertTo-Json -Depth 10 } catch { Write-Output $rawBodyText }
 } else {
     try { $respText | ConvertFrom-Json | ConvertTo-Json -Depth 10 } catch { Write-Output $respText }
 }
 
-# 登录/授权/Token 校验类接口不上报日志
+# 登录/授权/Token 校验类接口不上报日志（避免密码/token 走日志链路）
 if ($PathArg -match '^/api/v\d+/auth/' -or $PathArg -match '^/auth/') {
     if ($Code -ne "20000") { exit 1 }
     exit 0

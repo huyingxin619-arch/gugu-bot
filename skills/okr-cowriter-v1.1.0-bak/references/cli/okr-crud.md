@@ -107,8 +107,7 @@
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/my?planDetailId=5001' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
@@ -200,8 +199,7 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/my?planDetailId=5001' \
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan?planDetailId=5002' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 ---
@@ -268,32 +266,6 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan?planDetailI
 | keyResults[].id | Long | KR ID |
 | keyResults[].description | String | KR描述 |
 | keyResults[].sortOrder | Integer | 排序值 |
-| alignmentSuggestionContext | Object | 对齐建议上下文（供Agent/LLM基于直接上级OKR自动生成对齐建议，字段见下方说明） |
-
-**alignmentSuggestionContext 字段说明**：
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| directSupervisorId | String | 直接上级工号 |
-| directSupervisorName | String | 直接上级姓名 |
-| supervisorHasOkr | Boolean | 直接上级在本周期是否有对我可见的OKR |
-| noOkrReason | String | 无可见OKR原因（仅supervisorHasOkr=false时有值）：NO_DIRECT_SUPERVISOR/NO_PLAN_DETAIL/NO_OBJECTIVES/NOT_VISIBLE |
-| supervisorObjectives | Array | 上级对我可见的O列表（含KR），每个O/KR附带我的对齐情况 |
-| supervisorObjectives[].id | Long | 上级O ID |
-| supervisorObjectives[].description | String | 上级O描述 |
-| supervisorObjectives[].aligned | Boolean | 该上级O是否被我的O/KR对齐（O级对齐或对齐到其下属任一KR即为true） |
-| supervisorObjectives[].alignedByMyItems | Array | 我对齐到该O(O级或KR级)的我的O/KR列表（含objectiveId、objectiveDescription、keyResultId、keyResultDescription；keyResultId=null表示O级对齐） |
-| supervisorObjectives[].keyResults | Array | 上级O下对我可见的KR |
-| supervisorObjectives[].keyResults[].id | Long | 上级KR ID |
-| supervisorObjectives[].keyResults[].description | String | 上级KR描述 |
-| supervisorObjectives[].keyResults[].aligned | Boolean | 该KR是否被我对齐 |
-| supervisorObjectives[].keyResults[].alignedByMyItems | Array | 我对齐到该KR的我的O/KR |
-| myUnalignedItems | Array | 我尚未对齐到直接上级的O/KR列表（仅统计与直接上级之间的对齐关系；我对齐到其他人不影响此处） |
-| myUnalignedItems[].objectiveId | Long | 我的O ID |
-| myUnalignedItems[].objectiveDescription | String | 我的O描述 |
-| myUnalignedItems[].objectiveUnaligned | Boolean | 该O是否未在O级对齐到直接上级 |
-| myUnalignedItems[].unalignedKeyResults | Array | 该O下尚未对齐到直接上级的KR（含keyResultId、keyResultDescription） |
-
-> **Agent使用建议**：创建/编辑O后，若 alignmentSuggestionContext.supervisorHasOkr=true 且 myUnalignedItems 非空，可基于 supervisorObjectives 与 myUnalignedItems 做语义匹配，为用户给出1-3条对齐建议（推荐对齐到上级哪个O/KR并说明理由），等用户确认后再调用 `POST /api/v1/okr/alignments` 发起对齐。若 supervisorHasOkr=false 告知用户上级暂无可见OKR；若 myUnalignedItems 为空告知用户已完成与上级OKR的对齐。
 
 **业务规则**：
 - 只能在自己的 planDetailId 下新增 O（非本人返回 40803）
@@ -316,7 +288,6 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/employees/zhangsan?planDetailI
 # 新增一个O，含2个KR
 curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/objectives' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "description": "Q3提升后端系统性能",
@@ -384,7 +355,7 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/objectives' \
 | description | String | ❌ | 不修改 | 最大2000字符 | O 描述 |
 | remark | String | ❌ | 不修改 | - | 备注（可传null清空） |
 
-**成功响应 data 字段**：同 [新增O](#新增-o含-kr) 的 ObjectiveResultVO，**同样包含 `alignmentSuggestionContext` 字段（对齐建议上下文），Agent 必须读取该字段并按SKILL.md第9条流程输出对齐建议**。
+**成功响应 data 字段**：同 [新增O](#新增-o含-kr) 的 ObjectiveResultVO。
 
 **业务规则**：
 - 只有 O 的所有者（本人）可以编辑
@@ -401,7 +372,6 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/5001/objectives' \
 ```bash
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6002' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"description": "Q3提升后端系统性能与稳定性","remark":"更新备注"}'
 ```
@@ -448,7 +418,7 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6002' \
 | keyResults[].sortOrder | Integer | ❌ | 0 | - | 排序值 |
 | keyResults[].externalAnchor | Object | ❌ | null | - | 外部锚定（结构同新增O） |
 
-**成功响应 data 字段**：同 [新增O](#新增-o含-kr) 的 ObjectiveResultVO，**同样包含 `alignmentSuggestionContext` 字段（对齐建议上下文），Agent 必须读取该字段并按SKILL.md第9条流程输出对齐建议**。
+**成功响应 data 字段**：同 [新增O](#新增-o含-kr) 的 ObjectiveResultVO。
 
 **业务规则**：
 - keyResults 不能为空
@@ -473,7 +443,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6002' \
 # 全量保存O（包含编辑一个KR、新增一个KR、删除不在列表中的旧KR）
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6002/full' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "description": "Q3提升后端系统性能与稳定性",
@@ -532,8 +501,7 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6002/full' \
 **curl 示例**：
 ```bash
 curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/objectives/6002' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -604,7 +572,6 @@ curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/objectives/6002' \
 ```bash
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"currentValue":"350ms"}'
 ```

@@ -4,34 +4,27 @@
 
 > ⚠️ **重要**：以下所有示例中的 ID（5001、6001、7001 等）仅为演示用，实际调用时必须通过查询接口获取真实 ID，禁止直接复制使用。
 
-> 提示：先 `cd ~/.openclaw/skills/okr-cowriter`，然后 `chmod +x scripts/call.sh`（如未加执行权限）。
+> 提示：先 `cd ~/.openclaw/skills/pms-okr-cli-prd`，然后 `chmod +x scripts/call.sh`（如未加执行权限）。
 
 ## 标准调用模式（每个 agent 必读）
 
-所有调用遵循「空间确认 → 调用 → 提取 → 传递」模式。CLI 脚本自动管理 `X-Space-Id` Header，Agent 无需手动添加，但需处理多空间场景：
+所有调用遵循「调用 → 提取 → 传递」模式：
 
 ```bash
-# 0. 首次调用任意接口（自动触发登录+空间检测）
-# 如果用户属于多个空间且未配置spaceId，脚本以退出码2报错
+# 1. 调用接口获取响应
 RESP=$(./scripts/call.sh GET /api/v1/okr/plan-details 2>/dev/null)
-EXIT_CODE=$?
-if [ $EXIT_CODE -eq 2 ]; then
-  # 多空间未选择：stderr会列出可用空间，Agent需询问用户选择后写入配置
-  echo "请选择操作空间" >&2
-  exit 2
-fi
 
-# 1. 从 stdout JSON 中提取需要的字段
+# 2. 从 stdout JSON 中提取需要的字段
 PLAN_DETAIL_ID=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['current']['planDetailId'])")
 
-# 2. 用提取的 ID 调下一步（脚本自动带 X-Space-Id）
+# 3. 用提取的 ID 调下一步
 RESP2=$(./scripts/call.sh GET "/api/v1/okr/my?planDetailId=$PLAN_DETAIL_ID" 2>/dev/null)
 
-# 3. 提取 objectiveId / keyResultId
+# 4. 提取 objectiveId / keyResultId
 OBJ_ID=$(echo "$RESP2" | python3 -c "import sys,json; d=json.load(sys.stdin)['data']['objectives'][0]; print(d['id'])")
 KR_ID=$(echo "$RESP2" | python3 -c "import sys,json; d=json.load(sys.stdin)['data']['objectives'][0]['keyResults'][0]; print(d['id'])")
 
-# 4. 错误检查
+# 5. 错误检查
 CODE=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin)['code'])")
 if [ "$CODE" != "20000" ]; then
   MSG=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin)['message'])")
@@ -39,32 +32,21 @@ if [ "$CODE" != "20000" ]; then
 fi
 ```
 
-> **多空间处理**：首次调用时如果退出码为2，说明用户属于多个空间且未指定。Agent 应读取 stderr 输出的空间列表，询问用户选择，然后将选定的 spaceId 写入 `~/.okr-cowriter/config.json`（在JSON根级别添加 `"spaceId": <ID>` 字段），之后重新调用。单空间用户自动选择，无需任何操作。
-
-## ⚠️ 创建/编辑O后必须输出对齐建议（强制工作流）
-
-**凡是调用以下接口创建或修改O，成功后MUST读取响应中的 `alignmentSuggestionContext` 字段并按SKILL.md第9条流程给用户输出对齐建议，不得跳过：**
-- `POST /api/v1/okr/{planDetailId}/objectives`
-- `PUT /api/v1/okr/objectives/{id}`
-- `PUT /api/v1/okr/objectives/{id}/full`
-
-完整工作流见 [示例6b：创建O后自动建议对齐到直接上级](#示例6b创建o后自动建议对齐到直接上级)。
-
 ---
 
 ## 示例1：登录获取 Token
 
 ```bash
-cd ~/.openclaw/skills/okr-cowriter
+cd ~/.openclaw/skills/pms-okr-cli-prd
 
-# 使用call.sh（自动登录并缓存token到/tmp/okr-cowriter-token）
+# 使用call.sh（自动登录并缓存token到/tmp/pms-token-prd）
 ./scripts/call.sh GET /api/v1/auth/me
 
 # 或直接curl获取token
 BASE_URL=https://comark.stfile.com
 TOKEN=$(curl -sS -X POST "$BASE_URL/api/v1/auth/login" \
   -H 'Content-Type: application/json' \
-  -d '{"employeeCode":"YOUR_EMP_CODE","password":"your_password"}' | 
+  -d '{"employeeCode":"YOUR_EMP_CODE","password":"your_password"}' | \
   python3 -c "import sys,json;print(json.load(sys.stdin)['data']['token'])")
 echo "Token: $TOKEN"
 ```
@@ -94,19 +76,15 @@ PLAN_DETAIL_ID=5001
 
 curl 等价写法：
 ```bash
-# 注意：手动使用curl时，所有业务接口必须携带 X-Space-Id Header
 curl -sS -X GET "$BASE_URL/api/v1/okr/plan-details" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1"
+  -H "Authorization: Bearer $TOKEN"
 
 PLAN_DETAIL_ID=$(curl -sS -X GET "$BASE_URL/api/v1/okr/plan-details" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data']['current']['planDetailId'])")
-
+  -H "Authorization: Bearer $TOKEN" | \
+  python3 -c "import sys,json;d=json.load(sys.stdin);print(d['data']['current']['planDetailId'])")
 
 curl -sS -X GET "$BASE_URL/api/v1/okr/my?planDetailId=$PLAN_DETAIL_ID" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 ---
@@ -253,19 +231,19 @@ for o in d['objectives']:
 ./scripts/call.sh GET '/api/v1/okr/employees/search?keyword=张三'
 # 假设返回 employeeId = "zhangsan"
 
-# Step 2: 获取当前周期信息（需要year、month）
+# Step 2: 获取当前周期信息（需要periodId、year、month）
 ./scripts/call.sh GET /api/v1/okr/plan-details
-# 假设 year=2026, month=8
+# 假设 periodId=10, year=2025, month=7
 
 # Step 3: 查询张三的planDetailId
-./scripts/call.sh GET '/api/v1/okr/employees/zhangsan/plan-detail?year=2026&month=8&periodId=?'
+./scripts/call.sh GET '/api/v1/okr/employees/zhangsan/plan-detail?year=2025&month=7&periodId=10'
 # 假设返回 planDetailId=5002
 
 # Step 4: 获取张三的可见OKR树（选择要对齐的目标O/KR）
 ./scripts/call.sh GET '/api/v1/okr/employees/zhangsan/visible-okrs?planDetailId=5002'
 # 假设张三的O id=6101
 
-# Step 5: 发起对齐（我的O 6001对齐到张三的O 6101，直接生效）
+# Step 5: 发起对齐（我的O 6001对齐到张三的O 6101）
 ./scripts/call.sh POST /api/v1/okr/alignments '{
   "sourceObjectiveId": 6001,
   "targetEmployeeId": "zhangsan",
@@ -279,109 +257,19 @@ for o in d['objectives']:
   "code": 20000,
   "data": {
     "id": 8001,
-    "status": "ACCEPTED",
+    "status": "PENDING",
     "sourceEmployeeId": "zhaobinquan",
-    "sourceEmployeeName": "赵斌权",
     "targetEmployeeId": "zhangsan",
-    "targetEmployeeName": "张三",
     "sourceObjectiveId": 6001,
-    "targetObjectiveId": 6101,
-    "createdBy": "zhaobinquan",
-    "createdByName": "赵斌权"
+    "targetObjectiveId": 6101
   }
 }
 ```
 
-> ⚠️ 新流程发起对齐直接 ACCEPTED 生效，对方会收到通知，无需接受/确认；取消由双方任一调 PUT `/alignments/{id}/cancel` 即可。接受/拒绝/撤回接口仅保留用于处理历史 PENDING 数据。
-
----
-
-## 示例6b：创建O后自动建议对齐到直接上级
-
-**场景**：用户说"帮我建一个O：Q3提升系统稳定性，KR是P0故障降至0、测试覆盖率80%，并建议怎么对齐"
-
-创建O接口返回的 alignmentSuggestionContext 包含直接上级OKR及对齐状态，Agent 基于此做语义匹配给用户建议。
-
-```bash
-# Step 1: 查自己的planDetailId
-./scripts/call.sh GET /api/v1/okr/plan-details
-# 假设 planDetailId=5001
-
-# Step 2: 创建O（响应含 alignmentSuggestionContext）
-RESP=$(./scripts/call.sh POST /api/v1/okr/5001/objectives '{
-  "description": "Q3提升系统稳定性",
-  "keyResults": [
-    {"description":"P0故障数降至0","krType":"NUMERIC","targetValue":0,"weight":50},
-    {"description":"测试覆盖率>80%","krType":"PERCENTAGE","targetValue":80,"weight":50}
-  ]
-}')
-echo "$RESP"
-```
-
-期望响应 data 片段（含 alignmentSuggestionContext）：
-```json
-{
-  "id": 6001,
-  "description": "Q3提升系统稳定性",
-  "keyResults": [
-    {"id": 7001, "description": "P0故障数降至0"},
-    {"id": 7002, "description": "测试覆盖率>80%"}
-  ],
-  "alignmentSuggestionContext": {
-    "directSupervisorId": "lisi",
-    "directSupervisorName": "李四",
-    "supervisorHasOkr": true,
-    "supervisorObjectives": [
-      {
-        "id": 6101,
-        "description": "建设高可用架构",
-        "aligned": false,
-        "alignedByMyItems": [],
-        "keyResults": [
-          {"id": 7101, "description": "系统可用性99.99%", "aligned": false, "alignedByMyItems": []},
-          {"id": 7102, "description": "容灾演练覆盖核心链路", "aligned": false, "alignedByMyItems": []}
-        ]
-      }
-    ],
-    "myUnalignedItems": [
-      {
-        "objectiveId": 6001,
-        "objectiveDescription": "Q3提升系统稳定性",
-        "objectiveUnaligned": true,
-        "unalignedKeyResults": [
-          {"keyResultId": 7001, "keyResultDescription": "P0故障数降至0"},
-          {"keyResultId": 7002, "keyResultDescription": "测试覆盖率>80%"}
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Step 3: Agent 基于语义给出建议**（此步骤由 Agent/LLM 完成，不是调接口）
-
-Agent 结合 myUnalignedItems 和 supervisorObjectives 分析：
-- 我的O"Q3提升系统稳定性"与上级O"建设高可用架构"语义高度匹配
-- KR"P0故障数降至0"与上级KR"系统可用性99.99%"直接相关
-
-Agent 向用户展示建议：
-> 您的直接上级李四本季度OKR是"建设高可用架构"。建议：
-> 1. 将您的O"Q3提升系统稳定性"对齐到李四的O"建设高可用架构"
-> 2. 或将KR"P0故障数降至0"对齐到李四的KR"系统可用性99.99%"
-> 请问是否确认对齐？选哪个方案？
-
-**Step 4: 用户确认后发起对齐**（以员工本人身份）
-
-```bash
-# 用户选方案1（O级对齐）
-./scripts/call.sh POST /api/v1/okr/alignments '{
-  "sourceObjectiveId": 6001,
-  "targetEmployeeId": "lisi",
-  "targetObjectiveId": 6101
-}'
-```
-
-> 如果 alignmentSuggestionContext.supervisorHasOkr=false（上级无可见OKR）或 myUnalignedItems 为空（已全部对齐），则 Agent 直接告知用户相应情况，无需询问。
+> 张三接受对齐需要用张三的Token调用：
+> ```bash
+> ./scripts/call.sh PUT /api/v1/okr/alignments/8001/accept '{"targetObjectiveId":6101}'
+> ```
 
 ---
 
@@ -509,18 +397,6 @@ export PMS_BASE_URL=http://localhost:8080
 
 # 切回生产环境（取消环境变量即使用默认）
 unset PMS_BASE_URL
-```
-
-## 示例9b：切换操作空间
-
-```bash
-# 方式1：环境变量临时切换（不修改配置文件）
-export PMS_SPACE_ID=2
-./scripts/call.sh GET /api/v1/okr/plan-details
-
-# 方式2：修改配置文件持久切换
-# 编辑 ~/.okr-cowriter/config.json，将 spaceId 改为目标空间ID
-# 单空间用户无需配置，脚本自动选择
 ```
 
 ---

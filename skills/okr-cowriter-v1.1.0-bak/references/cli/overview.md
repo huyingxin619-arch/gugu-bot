@@ -36,15 +36,6 @@
 
 ## 核心概念
 
-### Space（空间/多租户隔离单元）
-系统支持多空间（多租户）隔离，每个空间是一个独立的业务数据单元。一个员工可以属于多个空间，不同空间的OKR数据完全隔离。
-- 所有业务数据（O/KR/对齐/评论/关注等）归属某个空间（space_id）
-- 业务接口必须通过 `X-Space-Id` Header 指定操作空间
-- 对齐(Alignment)只能在同一空间内发起，不支持跨空间对齐
-- 员工可通过配置文件或环境变量切换操作空间
-- `GET /api/v1/auth/me` 返回用户所属空间列表（spaces字段）和当前默认空间（currentSpaceId）
-- 不需要 X-Space-Id 的白名单接口：`/api/v1/auth/*`、`/api/v1/spaces/my`
-
 ### Plan（OKR计划）
 OKR管理的顶层容器，定义考核周期（如年度、半年、季度、月度）。一个 Plan 包含多个 PlanDetail。
 
@@ -269,9 +260,6 @@ KR 对应的外部参考标杆信息，用于设定 KR 时有对标依据。
 ### 查看/操作自己的 OKR
 
 ```
-0. 确定空间（CLI自动处理）：脚本首次调用时通过 /api/v1/auth/me 获取空间列表
-   - 单空间 → 自动选择，无需干预
-   - 多空间且未配置 → 脚本退出码2，Agent需引导用户选择空间
 1. GET /api/v1/okr/plan-details          → 获取 current.planDetailId
 2. GET /api/v1/okr/my?planDetailId=xxx   → 获取我的O和KR列表，拿到 objectiveId / keyResultId
 3. 根据需要调用增删改查接口（增O、改KR、更新进度等）
@@ -280,7 +268,6 @@ KR 对应的外部参考标杆信息，用于设定 KR 时有对标依据。
 ### 查看他人的 OKR
 
 ```
-0. 确定空间（同上，自动处理）
 1. GET /api/v1/okr/employees/search?keyword=xxx  → 搜索员工，拿到 employeeId（工号）
 2. GET /api/v1/okr/plan-details                  → 获取当前周期的 periodId、year、month
 3. GET /api/v1/okr/employees/{employeeId}/plan-detail?year=&month=&periodId=
@@ -291,14 +278,13 @@ KR 对应的外部参考标杆信息，用于设定 KR 时有对标依据。
 ### 发起对齐流程
 
 ```
-0. 确定空间（同上，自动处理）
 1. 自己已有的 OKR（通过 /my 获取）→ sourceObjectiveId / sourceKeyResultId
 2. GET /api/v1/okr/employees/search?keyword=xxx → 搜索目标人 targetEmployeeId
 3. GET /api/v1/okr/employees/{targetEmployeeId}/plan-detail?year=&month=&periodId=
    → 对方 planDetailId
 4. GET /api/v1/okr/employees/{targetEmployeeId}/visible-okrs?planDetailId=xxx
    → 对方可见的 O/KR 树，获取 targetObjectiveId / targetKeyResultId
-5. POST /api/v1/okr/alignments → 发起对齐（同一空间内）
+5. POST /api/v1/okr/alignments → 发起对齐
 ```
 
 ### KR 拆解流程

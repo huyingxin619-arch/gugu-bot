@@ -51,7 +51,6 @@
 # 更新KR进度为50%，状态为有风险
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/progress' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"progress":50,"progressStatus":"AT_RISK","currentValue":"350ms"}'
 ```
@@ -114,7 +113,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/progress' \
 # 自评打7分
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/self-score' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"selfScore":7}'
 ```
@@ -171,7 +169,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/self-score' \
 # 将O标记为已完成
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/progress-status' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"progressStatus":"COMPLETED"}'
 ```
@@ -213,7 +210,6 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/progress-statu
 # 直属上级给下属的O评挑战度8分
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/challenge-index' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"challengeIndex":8}'
 ```
@@ -258,14 +254,12 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/challenge-inde
 # 将O标记为FT-OKR
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/ft-okr' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"ftOkr":"Y"}'
 
 # 取消FT-OKR标记
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/objectives/6001/ft-okr' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"ftOkr":"N"}'
 ```

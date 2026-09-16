@@ -7,22 +7,16 @@
  *   node call.js GET /api/v1/okr/plan-details
  *   node call.js POST /api/v1/okr/5001/objectives '{"description":"Q3目标","keyResults":[]}'
  *
- * 认证优先级：环境变量 > 配置文件(~/.okr-cowriter/config.json) > 默认值
+ * 认证优先级：环境变量 > 配置文件(~/.pms-okr-cli-prd/config.json) > 默认值
  *
  * 环境变量:
  *   PMS_BASE_URL     服务地址，默认 https://comark.stfile.com
- *   PMS_TOKEN_CACHE  Token缓存文件，默认 <tmpdir>/okr-cowriter-token.json
- *   PMS_CONFIG_DIR   配置目录，默认 ~/.okr-cowriter
+ *   PMS_TOKEN_CACHE  Token缓存文件，默认 <tmpdir>/pms-token-prd.json
+ *   PMS_CONFIG_DIR   配置目录，默认 ~/.pms-okr-cli-prd
  *   PMS_CAS_TOKEN    CAS Token
- *   PMS_SPACE_ID     指定空间ID（覆盖配置文件和缓存）
+
  *
  * stdout: JSON响应体；stderr: 日志；exit 0=成功, 1=失败
- *
- * 空间(Space)支持 v1.3.1:
- *   - 所有业务接口自动携带 X-Space-Id Header
- *   - 登录后通过 /api/v1/auth/me 获取空间列表
- *   - 单空间自动选择；多空间需通过配置文件/环境变量/PMS_SPACE_ID 指定
- *   - 未指定且多空间时，脚本以非0退出码提示可用空间列表
  */
 
 const fs = require('fs');
@@ -32,20 +26,13 @@ const http = require('http');
 const https = require('https');
 
 // ========== 常量 ==========
-const SKILL_ID = 'okr-cowriter';
-const SKILL_VERSION = '1.3.1';
+const SKILL_ID = 'pms-okr-cli-prd';
+const SKILL_VERSION = '1.0.0';
 const HOME = os.homedir();
-const CONFIG_DIR = process.env.PMS_CONFIG_DIR || path.join(HOME, '.okr-cowriter');
+const CONFIG_DIR = process.env.PMS_CONFIG_DIR || path.join(HOME, '.pms-okr-cli-prd');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const TOKEN_CACHE = process.env.PMS_TOKEN_CACHE || path.join(os.tmpdir(), 'okr-cowriter-token.json');
+const TOKEN_CACHE = process.env.PMS_TOKEN_CACHE || path.join(os.tmpdir(), 'pms-token-prd.json');
 const DEFAULT_BASE_URL = 'https://comark.stfile.com';
-
-// 不需要 X-Space-Id 的白名单路径前缀
-const SPACE_WHITELIST_PREFIX = [
-  '/api/v1/auth/',
-  '/api/v1/spaces/my',
-];
-
 // 外部日志上报已移至服务端 OperationLogAspect + ExternalLogReportService
 
 // ========== 日志（stderr） ==========
@@ -70,6 +57,7 @@ function loadConfig() {
 }
 const cfg = loadConfig();
 const BASE_URL = process.env.PMS_BASE_URL || cfg.baseUrl || DEFAULT_BASE_URL;
+
 
 // ========== HTTP ==========
 function request(method, reqPath, body, headers = {}, timeoutMs = 30000) {
@@ -123,7 +111,7 @@ async function loginCas(casToken) {
   const resp = await request('POST', '/api/v1/auth/cas/login', { token: casToken });
   if (resp.code !== 20000) { logErr(`CAS登录失败: ${JSON.stringify(resp)}`); process.exit(1); }
   const t = resp.data && resp.data.token;
-  const ec = resp.data && resp.data.employee && resp.data.employeeCode;
+  const ec = resp.data && resp.data.employee && resp.data.employee.employeeCode;
   if (!t) { logErr(`登录响应无token: ${JSON.stringify(resp)}`); process.exit(1); }
   saveCache({ mode: 'cas', user: ec || '', token: t });
   logOk('[auth] 登录成功（CAS统一认证），token已缓存');
@@ -134,7 +122,7 @@ function printConfigHelp() {
   console.error(c('31', `
 未配置认证方式。
 1. 环境变量 PMS_CAS_TOKEN=<CAS Token>
-2. 配置文件 ${CONFIG_FILE}，示例：{"baseUrl":"${DEFAULT_BASE_URL}","authMode":"cas","casToken":"***","spaceId":1}
+2. 配置文件 ${CONFIG_FILE}，示例：{"baseUrl":"${DEFAULT_BASE_URL}","authMode":"cas","casToken":"***"}
 3. 直接告诉 AI agent 你的 CAS Token，agent 会帮你写入配置。
 `));
 }
@@ -145,88 +133,13 @@ async function getToken(cmdToken) {
   if (cached && cached.token) {
     try {
       const me = await request('GET', '/api/v1/auth/me', null, { 'Authorization': `Bearer ${cached.token}` }, 10000);
-      if (me.code === 20000) {
-        // 缓存空间信息供后续 resolveSpaceId 使用
-        tokenSpaceCache = me.data;
-        return cached.token;
-      }
+      if (me.code === 20000) return cached.token;
       logWarn('[auth] 缓存token已失效，重新登录...');
     } catch { logWarn('[auth] 缓存token失效，重新登录...'); }
   } else {
     logWarn('[auth] 未找到缓存token，开始登录...');
   }
-  const t = await loginCas();
-  // 登录成功后获取用户信息（含空间列表）
-  try {
-    const me = await request('GET', '/api/v1/auth/me', null, { 'Authorization': `Bearer ${t}` }, 10000);
-    if (me.code === 20000) {
-      tokenSpaceCache = me.data;
-    }
-  } catch {}
-  return t;
-}
-
-// ========== 空间解析 ==========
-let tokenSpaceCache = null; // /api/v1/auth/me 返回的 data，包含 spaces 列表
-
-function isSpaceWhitelist(pathArg) {
-  for (const prefix of SPACE_WHITELIST_PREFIX) {
-    if (pathArg.startsWith(prefix)) return true;
-  }
-  return false;
-}
-
-/**
- * 解析当前应使用的 spaceId
- * 优先级：环境变量 PMS_SPACE_ID > 配置文件 cfg.spaceId > /api/v1/auth/me 返回的 currentSpaceId
- * 多空间且未配置时，输出可用空间列表并退出
- */
-function resolveSpaceId(pathArg) {
-  // 白名单接口不需要 spaceId
-  if (isSpaceWhitelist(pathArg)) return null;
-
-  // 1. 环境变量优先
-  const envSpaceId = process.env.PMS_SPACE_ID;
-  if (envSpaceId) {
-    const id = parseInt(envSpaceId, 10);
-    if (!isNaN(id)) return id;
-  }
-
-  // 2. 配置文件
-  if (cfg.spaceId) {
-    const id = parseInt(cfg.spaceId, 10);
-    if (!isNaN(id)) return id;
-  }
-
-  // 3. 从 /api/v1/auth/me 缓存获取
-  if (tokenSpaceCache) {
-    const spaces = tokenSpaceCache.spaces || [];
-    const currentSpaceId = tokenSpaceCache.currentSpaceId;
-
-    if (spaces.length === 0) {
-      die('您当前不属于任何空间，请联系管理员');
-    }
-
-    if (spaces.length === 1) {
-      // 只有一个空间，自动选择
-      return spaces[0].spaceId;
-    }
-
-    // 多个空间
-    if (currentSpaceId && spaces.some(s => s.spaceId === currentSpaceId)) {
-      // 有上次使用的默认空间
-      return currentSpaceId;
-    }
-
-    // 多空间且无默认空间 → 需要用户选择
-    const spaceList = spaces.map((s, i) => `  ${i + 1}. ${s.spaceName} (spaceId=${s.spaceId})`).join('\n');
-    logErr(`您属于多个空间，请指定要操作的空间：\n${spaceList}\n\n解决方式：\n  1. 在 ${CONFIG_FILE} 中添加 "spaceId": <ID> 字段\n  2. 设置环境变量 PMS_SPACE_ID=<ID>\n  3. 告诉 AI agent 你要操作哪个空间，agent 会帮你配置`);
-    // 以特殊退出码 2 标识需要选择空间
-    process.exit(2);
-  }
-
-  // 如果还没有空间信息（理论不会到这里，因为 getToken 后一定有），返回 null 让后端报错
-  return null;
+  return loginCas();
 }
 
 // ========== 从 JWT 解出工号/用户ID/姓名 ==========
@@ -259,7 +172,6 @@ const MODULE_NAME_MAP = {
   'periods': '周期管理',
   'reviews': '考核管理',
   'reports': '报表中心',
-  'spaces': '空间管理',
 };
 
 // ========== 主流程 ==========
@@ -275,9 +187,6 @@ async function main() {
 示例:
   node call.js GET /api/v1/okr/plan-details
   node call.js POST /api/v1/okr/5001/objectives '{"description":"Q3目标","keyResults":[]}'
-
-环境变量:
-  PMS_SPACE_ID   指定操作空间ID（多空间时必须）
 `);
     process.exit(1);
   }
@@ -286,26 +195,16 @@ async function main() {
   if (!['GET', 'POST', 'PUT', 'DELETE'].includes(m)) die(`不支持的HTTP方法: ${m}`);
 
   const startTime = Date.now();
+  const startIso = new Date().toISOString();
   const token = await getToken(cmdToken);
-
-  // 解析 spaceId（白名单接口返回 null）
-  const spaceId = resolveSpaceId(pathArg);
-
   const jwtClaims = decodeJwtClaims(token);
   const empCode = jwtClaims.employeeCode || 'unknown';
   const userId = jwtClaims.userId || empCode;
   const userName = jwtClaims.userName || empCode;
 
-  // 构建请求头
-  const reqHeaders = { 'Authorization': `Bearer ${token}` };
-  if (spaceId !== null) {
-    reqHeaders['X-Space-Id'] = String(spaceId);
-  }
-
-  // 日志中显示当前空间
-  const spaceLabel = spaceId !== null ? ` [spaceId=${spaceId}]` : '';
-  log(`[${m}] ${BASE_URL}${pathArg}${spaceLabel}`);
+  log(`[${m}] ${BASE_URL}${pathArg}`);
   if (bodyArg) {
+    // 打印 Body 时脱敏敏感字段（密码/token）
     try {
       const d = JSON.parse(bodyArg);
       for (const k of SENS_KEYS) { if (k in d) d[k] = '***'; }
@@ -319,7 +218,9 @@ async function main() {
   let curlExit = 0;
   let httpStatus = 0;
   try {
-    resp = await request(m, pathArg, ['GET', 'DELETE'].includes(m) ? null : bodyArg, reqHeaders, 60000);
+    resp = await request(m, pathArg, ['GET', 'DELETE'].includes(m) ? null : bodyArg, {
+      'Authorization': `Bearer ${token}`
+    }, 60000);
     httpStatus = resp.httpStatus || 0;
   } catch (e) {
     logErr(`[网络错误] ${e.message}`);
@@ -333,16 +234,7 @@ async function main() {
   if (resp.code === 20000) logOk(`[20000] success (${duration}ms)`);
   else logErr(`[${resp.code}] 请求失败 (${duration}ms)`);
 
-  // 处理空间相关错误码，给出友好提示
-  if (resp.code === 40013) {
-    logErr('提示：该接口需要指定空间，请检查 X-Space-Id Header');
-  } else if (resp.code === 40014) {
-    logErr('提示：您无权访问当前空间，请检查 spaceId 配置');
-  } else if (resp.code === 40017) {
-    logErr('提示：当前空间已停用，请切换其他空间');
-  }
-
-  // 输出原始服务端响应
+  // 输出原始服务端响应，不附加内部使用的 httpStatus 字段
   if (resp._raw) {
     process.stdout.write(resp._raw);
   } else {
@@ -353,7 +245,8 @@ async function main() {
   }
   process.stdout.write('\n');
 
-  // 登录/授权/Token 校验类接口不上报日志
+  // 登录/授权/Token 校验类接口不上报日志（避免密码/token 走日志链路）
+  // 严格前缀匹配，避免误伤含 'auth' 字样的其他业务路径
   if (/^\/(api\/v\d+\/)?auth\//.test(pathArg)) {
     process.exit(success ? 0 : 1);
   }

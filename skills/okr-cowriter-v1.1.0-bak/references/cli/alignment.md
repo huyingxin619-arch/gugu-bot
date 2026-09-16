@@ -43,17 +43,13 @@
 | rejectReason | String | 拒绝原因（历史 PENDING 数据可能有值，新流程无） |
 | createdAt | String(DateTime) | 创建时间 |
 | updatedAt | String(DateTime) | 更新时间 |
-| createdBy | String | 实际创建人工号（created_by），用于区分本人创建 vs 管理员代发（sourceEmployeeId != createdBy 即为代发） |
-| createdByName | String | 实际创建人姓名 |
 
 **业务规则**：
 - 当前登录用户为发起方
 - 不能对齐自己（targetEmployeeId 不能是自己工号）
 - 双方 O/KR 必须真实存在且属于对应员工
-- 发起方必须对目标方 O/KR 具有可见权限（ALL/汇报线/指定员工/本人），不可见返回 40301（"目标 OKR 不在可见范围内，无法对齐"）
 - 防重复：相同发起方+目标方+相同源/目标 O/KR 的活跃对齐（ACCEPTED）不能重复创建
 - 发起即 ACCEPTED，双方 O/KR 立即填充
-- 通知内容："{发起方姓名}对齐了您的OKR"
 
 **错误码**：
 | code | 触发场景 |
@@ -67,7 +63,6 @@
 # O级对齐：我的O对齐到张三的O
 curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceObjectiveId": 6001,
@@ -78,7 +73,6 @@ curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments' \
 # KR级对齐：我的KR对齐到李四的KR
 curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "sourceObjectiveId": 6001,
@@ -119,62 +113,6 @@ curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments' \
 
 ---
 
-## 管理员批量代发起对齐（OKR_ADMIN专用）
-
-**方法+路径**：POST /api/v1/okr/alignments/admin-batch-create
-
-**功能**：OKR_ADMIN 管理员批量代指定员工发起对齐，部分成功模式，单次最多50条。单条失败不影响其他条。
-
-**认证**：必须（且需拥有 OKR_ADMIN 角色）
-
-**请求体（JSON）**：
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|:----:|------|
-| items | Array | ✅ | 对齐项列表，最多50条 |
-| items[].sourceEmployeeId | String | ✅ | 被代发员工工号 |
-| items[].sourceObjectiveId | Long | ✅ | 被代发员工的O ID |
-| items[].sourceKeyResultId | Long | ❌ | 被代发员工的KR ID（null=O级对齐） |
-| items[].targetEmployeeId | String | ✅ | 目标员工工号 |
-| items[].targetObjectiveId | Long | ✅ | 对齐到对方的O ID |
-| items[].targetKeyResultId | Long | ❌ | 对齐到对方的KR ID（null=对齐到O） |
-
-**成功响应 data 字段**：
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| totalCount | Integer | 请求总条数 |
-| successCount | Integer | 成功条数 |
-| failCount | Integer | 失败条数 |
-| results | Array | 每条结果，按请求顺序返回 |
-| results[].index | Integer | items数组下标（从0开始） |
-| results[].success | Boolean | 是否成功 |
-| results[].data | AlignmentVO | 成功时返回对齐记录（同发起对齐响应） |
-| results[].errorCode | Integer | 失败时错误码 |
-| results[].errorMessage | String | 失败时错误信息 |
-
-**业务规则**：
-- 仅 OKR_ADMIN 可调用，普通用户返回 40301
-- 权限校验只在入口做一次
-- 员工存在性批量预校验；O/KR归属校验、防重复校验、可见性校验（以被代发员工视角判断目标方OKR可见性）逐条执行
-- 单条失败 catch 住错误记录到结果，其他条继续执行
-- 不做跨条事务回滚，各条独立提交
-- 每条成功后单独发送通知给对应targetEmployeeId，通知内容："{管理员姓名}代{被代发员工姓名}对齐了您的OKR"
-
-**curl 示例**：
-```bash
-curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments/admin-batch-create' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "items": [
-      {"sourceEmployeeId":"EMP003","sourceObjectiveId":10,"targetEmployeeId":"EMP002","targetObjectiveId":5},
-      {"sourceEmployeeId":"EMP003","sourceObjectiveId":11,"targetEmployeeId":"EMP004","targetObjectiveId":20}
-    ]
-  }'
-```
-
----
-
 ## 取消对齐
 
 **方法+路径**：PUT /api/v1/okr/alignments/{id}/cancel
@@ -206,8 +144,7 @@ curl -sS -X POST 'https://comark.stfile.com/api/v1/okr/alignments/admin-batch-cr
 **curl 示例**：
 ```bash
 curl -sS -X PUT 'https://comark.stfile.com/api/v1/okr/alignments/8001/cancel' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 ---

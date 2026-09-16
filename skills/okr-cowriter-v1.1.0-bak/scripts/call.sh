@@ -1,24 +1,19 @@
 #!/usr/bin/env bash
-# PMS OKR CLI - 通用调用脚本（生产环境版）v1.3.1（支持空间维度）
+# PMS OKR CLI - 通用调用脚本（生产环境版）
 # 用法:
 #   ./call.sh METHOD PATH [BODY_JSON] [TOKEN]
-#
-# 环境变量:
-#   PMS_SPACE_ID   指定操作空间ID（多空间时必须）
 
 set -euo pipefail
 
-CONFIG_DIR="${PMS_CONFIG_DIR:-$HOME/.okr-cowriter}"
+CONFIG_DIR="${PMS_CONFIG_DIR:-$HOME/.pms-okr-cli-prd}"
 CONFIG_FILE="$CONFIG_DIR/config.json"
 BASE_URL="${PMS_BASE_URL:-}"
 # 统一 token 缓存路径（与 call.js/call.ps1 对齐）：TMPDIR 或 /tmp 下的 JSON 文件 {mode,user,token}
 if [ -n "${PMS_TOKEN_CACHE:-}" ]; then
     TOKEN_CACHE="$PMS_TOKEN_CACHE"
 else
-    TOKEN_CACHE="${TMPDIR:-/tmp}/okr-cowriter-token.json"
+    TOKEN_CACHE="${TMPDIR:-/tmp}/pms-token-prd.json"
 fi
-# 空间信息缓存（/api/v1/auth/me 返回的 spaces 信息）
-SPACE_CACHE="${TMPDIR:-/tmp}/okr-cowriter-space.json"
 TOKEN_CACHE_DIR="$(dirname "$TOKEN_CACHE")"
 mkdir -p "$TOKEN_CACHE_DIR" 2>/dev/null || true
 chmod 700 "$TOKEN_CACHE_DIR" 2>/dev/null || true
@@ -48,14 +43,6 @@ except Exception: print('')
 "
 }
 jcode() { echo "$1" | jget code; }
-
-# 不需要 X-Space-Id 的白名单路径
-is_space_whitelist() {
-    case "$1" in
-        /api/v*/auth/*|/api/v1/spaces/my) return 0 ;;
-        *) return 1 ;;
-    esac
-}
 
 http() {
     local m="$1" p="$2" body="${3:-}"
@@ -100,9 +87,6 @@ usage() {
   PATH       API路径
   BODY_JSON  请求体JSON（POST/PUT时）
   TOKEN      Bearer Token（可选）
-
-环境变量:
-  PMS_SPACE_ID   指定操作空间ID（多空间时必须）
 EOF
     exit 1
 }
@@ -119,13 +103,13 @@ login_cas() {
     local cas_token="${1:-${PMS_CAS_TOKEN:-$(config_get casToken)}}"
     [ -z "$cas_token" ] && die "未提供CAS Token"
     echo -e "${YELLOW}[auth] CAS统一认证登录中...${NC}" >&2
-    local login_json; login_json=$(CRED_TOK="$cas_token" python3 -c 'import os,json; print(json.dumps({"token":os.environ["CRED_TOK"]}))')
+    local login_json; login_json=$(CRED_TOK="$cas_token" python3 -c         'import os,json; print(json.dumps({"token":os.environ["CRED_TOK"]}))')
     local resp; resp=$(http POST "/api/v1/auth/cas/login" "$login_json")
     [ "$(jcode "$resp")" != "20000" ] && { echo -e "${RED}CAS登录失败: ${resp}${NC}" >&2; exit 1; }
     local t; t=$(echo "$resp" | jget data.token)
     local ec; ec=$(echo "$resp" | jget data.employee.employeeCode)
     [ -z "$t" ] && die "登录响应无token"
-    CAS_EC="$ec" CAS_TOK="$t" CAS_PATH="$TOKEN_CACHE" python3 -c 'import os,json; json.dump({"mode":"cas","user":os.environ.get("CAS_EC",""),"token":os.environ["CAS_TOK"]}, open(os.environ["CAS_PATH"],"w"), ensure_ascii=False)' 2>/dev/null || {
+    CAS_EC="$ec" CAS_TOK="$t" CAS_PATH="$TOKEN_CACHE" python3 -c         'import os,json; json.dump({"mode":"cas","user":os.environ.get("CAS_EC",""),"token":os.environ["CAS_TOK"]}, open(os.environ["CAS_PATH"],"w"), ensure_ascii=False)' 2>/dev/null || {
         echo "cas" > "${TOKEN_CACHE}.mode"
         [ -n "$ec" ] && echo "$ec" > "${TOKEN_CACHE}.user"
         echo "$t" > "${TOKEN_CACHE}"
@@ -140,124 +124,36 @@ relogin() {
     login_cas "${PMS_CAS_TOKEN:-$(config_get casToken)}"
 }
 
-# 全局变量：缓存 /api/v1/auth/me 的响应（含空间列表）
-ME_RESP=""
-
 get_token() {
     if [ -n "$TOKEN_ARG" ]; then echo "$TOKEN_ARG"; return; fi
     if [ -f "$TOKEN_CACHE" ] && [ -s "$TOKEN_CACHE" ]; then
         local cached; cached=$(cat "$TOKEN_CACHE")
-        # 兼容老格式（纯文本token）和新格式（JSON {mode,user,token}）
-        local cached_token
-        cached_token=$(echo "$cached" | python3 -c "import sys,json; d=sys.stdin.read().strip(); print(json.loads(d).get('token','') if d.startswith('{') else d)" 2>/dev/null || echo "$cached")
-        local me_resp
-        me_resp=$(http GET "/api/v1/auth/me" "" -H "Authorization: Bearer ${cached_token}")
-        if [ "$(echo "$me_resp" | jget code)" = "20000" ]; then
-            ME_RESP="$me_resp"
-            echo "$cached_token"; return;
-        fi
+        local code
+        code=$(http GET "/api/v1/auth/me" "" -H "Authorization: Bearer ${cached}" | jget code)
+        if [ "$code" = "20000" ]; then echo "$cached"; return; fi
         echo -e "${YELLOW}[auth] 缓存token已失效，重新登录...${NC}" >&2
     else
         echo -e "${YELLOW}[auth] 未找到缓存token，开始登录...${NC}" >&2
     fi
-    local new_token; new_token=$(relogin)
-    # 登录后获取用户信息（含空间列表）
-    local me_resp
-    me_resp=$(http GET "/api/v1/auth/me" "" -H "Authorization: Bearer ${new_token}")
-    if [ "$(echo "$me_resp" | jget code)" = "20000" ]; then
-        ME_RESP="$me_resp"
-    fi
-    echo "$new_token"
-}
-
-# 解析 spaceId
-# 优先级：PMS_SPACE_ID 环境变量 > 配置文件 spaceId > /api/v1/auth/me 的 currentSpaceId > 单空间自动选 > 多空间报错
-resolve_space_id() {
-    if is_space_whitelist "$PATH_ARG"; then
-        echo ""; return
-    fi
-
-    # 1. 环境变量
-    if [ -n "${PMS_SPACE_ID:-}" ]; then
-        echo "$PMS_SPACE_ID"; return
-    fi
-
-    # 2. 配置文件
-    local cfg_space; cfg_space=$(config_get spaceId)
-    if [ -n "$cfg_space" ]; then
-        echo "$cfg_space"; return
-    fi
-
-    # 3. 从 /api/v1/auth/me 响应获取
-    if [ -n "$ME_RESP" ]; then
-        local space_count; space_count=$(echo "$ME_RESP" | python3 -c "import sys,json; print(len(json.load(sys.stdin)['data'].get('spaces',[])))" 2>/dev/null || echo "0")
-        if [ "$space_count" = "0" ]; then
-            die "您当前不属于任何空间，请联系管理员"
-        elif [ "$space_count" = "1" ]; then
-            # 单空间自动选择
-            echo "$ME_RESP" | python3 -c "import sys,json; print(json.load(sys.stdin)['data']['spaces'][0]['spaceId'])" 2>/dev/null
-            return
-        else
-            # 多空间：检查是否有 currentSpaceId
-            local current_sid; current_sid=$(echo "$ME_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin)['data']; print(d.get('currentSpaceId','') or '')" 2>/dev/null || echo "")
-            if [ -n "$current_sid" ] && [ "$current_sid" != "None" ]; then
-                # 验证 currentSpaceId 在 spaces 列表中
-                local in_list; in_list=$(echo "$ME_RESP" | python3 -c "
-import sys,json
-d=json.load(sys.stdin)['data']
-cid=str(d.get('currentSpaceId',''))
-spaces=d.get('spaces',[])
-print('yes' if any(str(s['spaceId'])==cid for s in spaces) else 'no')
-" 2>/dev/null || echo "no")
-                if [ "$in_list" = "yes" ]; then
-                    echo "$current_sid"; return
-                fi
-            fi
-            # 多空间无默认 → 报错提示
-            local space_list; space_list=$(echo "$ME_RESP" | python3 -c "
-import sys,json
-spaces=json.load(sys.stdin)['data'].get('spaces',[])
-for i,s in enumerate(spaces,1):
-    print(f'  {i}. {s[\"spaceName\"]} (spaceId={s[\"spaceId\"]})')
-" 2>/dev/null)
-            echo -e "${RED}您属于多个空间，请指定要操作的空间：${NC}" >&2
-            echo -e "$space_list" >&2
-            echo -e "" >&2
-            echo -e "${YELLOW}解决方式：${NC}" >&2
-            echo -e "  1. 在 $CONFIG_FILE 中添加 \"spaceId\": <ID> 字段" >&2
-            echo -e "  2. 设置环境变量 PMS_SPACE_ID=<ID>" >&2
-            echo -e "  3. 告诉 AI agent 你要操作哪个空间，agent 会帮你配置" >&2
-            exit 2
-        fi
-    fi
-
-    # 没有空间信息，返回空（后端会报40013）
-    echo ""
+    relogin
 }
 
 TOKEN=$(get_token)
-SPACE_ID=$(resolve_space_id)
 
 # ============ 执行业务请求 ============
 START_MS=$(python3 -c "import time; print(int(time.time()*1000))")
+START_ISO=$(date -u +"%Y-%m-%dT%H:%M:%S+00:00")
 
 CURL_ARGS=(-sS --connect-timeout 10 --max-time 60 -w $'\n__HTTP_CODE__:%{http_code}' -X "$METHOD" "${BASE_URL}${PATH_ARG}" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "X-Client-Type: SKILL" \
-    -H "X-Skill-Id: okr-cowriter" \
-    -H "X-Skill-Version: 1.3.1" \
+    -H "X-Skill-Id: pms-okr-cli-prd" \
+    -H "X-Skill-Version: 1.0.0" \
     -H "Content-Type: application/json")
-
-# 注入 X-Space-Id
-if [ -n "$SPACE_ID" ]; then
-    CURL_ARGS+=(-H "X-Space-Id: ${SPACE_ID}")
-fi
-
 [ -n "$BODY_JSON" ] && CURL_ARGS+=(-d "$BODY_JSON")
 
-SPACE_LABEL=""
-[ -n "$SPACE_ID" ] && SPACE_LABEL=" [spaceId=${SPACE_ID}]"
-echo -e "${CYAN}[${METHOD}] ${BASE_URL}${PATH_ARG}${SPACE_LABEL}${NC}" >&2
+echo -e "${CYAN}[${METHOD}] ${BASE_URL}${PATH_ARG}${NC}" >&2
+# 打印 Body 时脱敏敏感字段（密码/token）
 if [ -n "$BODY_JSON" ]; then
     SAFE_BODY=$(echo "$BODY_JSON" | python3 -c "
 import sys,json
@@ -287,7 +183,7 @@ CODE=$(echo "$RESP" | jget code)
 END_MS=$(python3 -c "import time; print(int(time.time()*1000))")
 DURATION_MS=$((END_MS - START_MS))
 
-# 从 JWT 解出工号/用户ID/姓名
+# 从 JWT 解出工号/用户ID/姓名（base64 第二段）
 EMP_CODE=""
 USER_ID=""
 USER_NAME=""
@@ -301,6 +197,7 @@ try:
     ec=claims.get('employeeCode','') or ''
     uid=claims.get('employeeId','') or claims.get('userId','') or claims.get('uid','') or ''
     nm=claims.get('employeeName','') or claims.get('userName','') or claims.get('name','') or ''
+    # 兼容数字id转字符串
     print(json.dumps({'employeeCode':ec,'userId':str(uid) if uid is not None else '','userName':nm}, ensure_ascii=False))
 except Exception: print('{}')
 " 2>/dev/null)
@@ -315,17 +212,12 @@ if [ "$CODE" = "20000" ]; then
     echo -e "${GREEN}[20000] success (${DURATION_MS}ms)${NC}" >&2
 else
     echo -e "${RED}[${CODE}] 请求失败 (${DURATION_MS}ms)${NC}" >&2
-    # 空间相关错误码友好提示
-    if [ "$CODE" = "40013" ]; then
-        echo -e "${YELLOW}提示：该接口需要指定空间，请检查 X-Space-Id Header${NC}" >&2
-    elif [ "$CODE" = "40014" ]; then
-        echo -e "${YELLOW}提示：您无权访问当前空间，请检查 spaceId 配置${NC}" >&2
-    elif [ "$CODE" = "40017" ]; then
-        echo -e "${YELLOW}提示：当前空间已停用，请切换其他空间${NC}" >&2
-    fi
 fi
 echo "$RESP" | python3 -m json.tool 2>/dev/null || echo "$RESP"
 
+# 登录/授权/Token 校验类接口不上报日志（避免密码/token 走日志链路，也避免 auth 类动作被重复记录）
+# 匹配规则：路径前缀为 /api/vN/auth/ 或 /auth/（严格前缀匹配，避免误伤其他含 auth 的路径）
+# 登录/授权/Token 校验类接口跳过（避免密码/token 走日志链路）
 case "$PATH_ARG" in
     /api/v[0-9]/auth/*|/auth/*)
         [ "$CODE" != "20000" ] && exit 1

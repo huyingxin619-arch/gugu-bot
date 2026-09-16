@@ -38,7 +38,6 @@
 ```bash
 curl -sS -X POST 'http://localhost:8080/api/v1/okr/follows' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{"targetEmployeeId":"zhangsan"}'
 ```
@@ -76,8 +75,7 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/follows' \
 **curl 示例**：
 ```bash
 curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/follows/zhangsan' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1"
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 **响应示例**：
@@ -112,8 +110,7 @@ curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/follows/zhangsan' \
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/follows' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：

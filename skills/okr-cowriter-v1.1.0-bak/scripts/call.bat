@@ -2,7 +2,7 @@
 REM PMS OKR CLI - Windows 入口批处理
 REM 用法: call.bat METHOD PATH [BODY_JSON] [TOKEN]
 REM 认证方式见同目录 call.sh / call.ps1 或 SKILL.md
-REM 配置文件: %USERPROFILE%\.okr-cowriter\config.json
+REM 配置文件: %USERPROFILE%\.pms-okr-cli-prd\config.json
 
 setlocal enabledelayedexpansion
 

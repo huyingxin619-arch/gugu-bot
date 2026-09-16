@@ -86,9 +86,8 @@
 ```bash
 curl -sS -X POST 'http://localhost:8080/api/v1/okr/objectives/6001/progress-logs' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
-  -d '{"content":"本周完成了核心接口设计，下周开始进入开发阶段。接口响应时间已优化到200ms以内。"}'
+  -d '{"content":"本周完成了核心接口设计，下周开始进入开发阶段。接口响应时间已优化到200ms以内。"}' \
   | python3 -m json.tool
 ```
 
@@ -191,16 +190,15 @@ curl -sS -X POST 'http://localhost:8080/api/v1/okr/objectives/6001/progress-logs
 ```bash
 # 获取全部记录（默认分页 page=1, pageSize=20）
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/objectives/6001/logs' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+
 # 只看进展记录，第1页，每页10条
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/objectives/6001/logs?type=PROGRESS&page=1&pageSize=10' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool \
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+
 # 只看更新日志
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/objectives/6001/logs?type=UPDATE' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例（混合类型）**：

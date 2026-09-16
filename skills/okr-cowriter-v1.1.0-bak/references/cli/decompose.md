@@ -40,8 +40,7 @@ KR 拆解功能允许将 KR 按比例拆解指派给其他人承担。
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/key-results/7001/decompose' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
@@ -116,7 +115,6 @@ curl -sS -X GET 'http://localhost:8080/api/v1/okr/key-results/7001/decompose' \
 # 综合操作：新增给王五30%、修改赵六为25%、删除孙七的拆解
 curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/decompose' \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" \
   -H "Content-Type: application/json" \
   -d '{
     "items": [
@@ -172,8 +170,7 @@ curl -sS -X PUT 'http://localhost:8080/api/v1/okr/key-results/7001/decompose' \
 **curl 示例**：
 ```bash
 curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/decompose/10003' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
@@ -225,8 +222,7 @@ curl -sS -X DELETE 'http://localhost:8080/api/v1/okr/decompose/10003' \
 **curl 示例**：
 ```bash
 curl -sS -X GET 'http://localhost:8080/api/v1/okr/key-results/7001/subordinates' \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Space-Id: 1" | python3 -m json.tool
+  -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
 ```
 
 **响应示例**：
