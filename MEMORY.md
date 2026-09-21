@@ -84,7 +84,7 @@
 | `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则） |
 | `projects/audit/` | 审计/合规（IAB会员续费） |
 | `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计/ADM龙虾看板/达能/UA来源排查/vivo SDK签名） |
-| `projects/` 根 | 独立项目（布点/IPTV-CVB/三九/vivo/PG双周会/YUM成本评估） |
+| `projects/` 根 | 独立项目（布点/IPTV-CVB/三九红果数据排查/vivo/PG双周会/YUM成本评估） |
 
 ### 知识库（knowledge/）
 

@@ -195,6 +195,7 @@
 | 布点/计算链路 | `projects/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
 | TAG审计（已归档） | `projects/archived/tag-audit.md` |
+| 红果短剧/三九数据差异 | `projects/sanjiu-honggu-data-discrepancy.md` |
 | IPTV/CVB/广电 | `projects/iptv-cvb.md` |
 | 秒针产品 | `knowledge/miaozhen-products.md` |
 | ADM拉数 | `knowledge/adm-data-pull-sop.md` |
