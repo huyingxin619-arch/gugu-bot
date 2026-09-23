@@ -143,6 +143,13 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 |          | ③ 所有AI bot统一fallback链：mlamp/kimi-k3 → qwen3.6-plus → mlamp/deepseek-v4-pro → claude-opus-4-6，各bot已完成配置并重启 |
 |          | ④ AdMonitor知识库安全治理：PG信息脱敏事故处理，所有"PG"改"KA"+物理隔离+输出脱敏规则+每日凌晨脱敏检查定时任务 |
 |          | 待办：监控新通知规则运行效果；排查fallback未触发问题 |
+## 2026-09-21 M+接口测试方向纠正+case设计初稿
+
+- 纠正adm测试助手方向：误设计为界面测试用例，经小胡明确为通过界面了解M+产品逻辑后测试API接口
+- 确认ADM侧M+接口范围：/admonitor/mplus/task/* 共5个（create/status/download/detail/list），datahub和自定义任务接口未开发
+- 明确测试策略：先设计接口case，生产环境任务配置构建和比对作为实际测试一部分
+- adm测试助手完成155条case设计初稿，小胡待确认方向和待确认项
+
 ## 2026-09-20 M+ API接口测试用例设计完成
 
 - **方向纠正**：初始误设计为"界面测试用例"，经小胡纠正后转为 M+ API 接口测试用例
@@ -206,6 +213,11 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 |          | ④ **M+ API需求已提交**（Loop issue ADM-24）：ADM M+ 5个接口 + TVM数据中心4种任务类型+PMO跨屏打通+跨屏打通CTR，期望2周完成（9/11），指派吕金果二次分配 |
 |          | ⑤ Loop工作区推广：产品给研发提需求统一用Loop沟通，研发可设专家接单 |
 |          | ⑥ adm PM助手模型fallback链配置完成：tencent/glm-5.2 → mlamp/kimi-k3 → qwen3.6-plus → claude-sonnet-4-6 |
+| 2026-09-22 | **M+ API测试推进+多维API限制排查：** |
+|          | ① M+测试155条case完成140条，剩余15条（L组真实生产任务）因dev环境计算链路10:31起全痏被block，所有任务status=4计算失败 |
+|          | ② 活动2508390的target_id与Minisite stid不一致，带target创建全失败（INVALID_STID），仅全人群可创建 |
+|          | ③ 18个真校验漏洞实锤（taskName超长/taskType+caid不校验/target缺失放行等），待提工单 |
+|          | ④ 多维API限制：ADM创建campaign+website+spots条目超200即失败，Web端正常；TVM官方文档限制600。小胡确认ADM逻辑为"维度指标乘起来"非简单200条，已让马杰给示例任务ID(4397187)排查 |
 | TBD | 与 AdMonitor 讨论风险清单 | ⏳ |
 | TBD | P0 需求逐一确认方案和排期 | ⏳ |
 | TBD | 其他模块 API 适配现状确认（任务定制/数据中心等） | ⏳ |
@@ -227,7 +239,12 @@ KA客户(宝洁) 17条 > 汉高 15条 > 飞鹤 13条 > 雅诗兰黛 12条 > 达�
 - [ ] M+ API用例执行（dev环境P0正向+反向）（adm测试助手）
 - [ ] UI↔API交叉校验：抓web请求体对比字段映射（adm测试助手）
 - [ ] 40301数据权限case：需第二账号（阻塞）
-- [ ] ADM-107/108工单 9/22上线跟进
+- [ ] 整理18个M+ API校验漏洞工单，提交研发（9/22日报）
+- [ ] ADM-118多维任务API维度组合限制排查跟进（9/22日报）
+- [ ] 确认活动2508390的target_id与Minisite stid对应关系（9/22日报）
+- [ ] 确认dev环境M+计算链路故障原因，推动修复（小胡→于长亮）（9/22日报）
+- [ ] CBP研究IDFA缓存问题（9/22日报）
+- [ ] CAID版本打通研究对外口径回复（9/22日报）
 - [ ] 5个权限阻塞case补权限或换账号验证（mobileDetail/viewability/totalnet/showAllTask）（胡映昕）
 - [ ] status接口返回格式差异反馈开发确认（data.tasks[]、statusText、taskId为string）（胡映昕）
 - [ ] byrule token生产环境部署跟进
