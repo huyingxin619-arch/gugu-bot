@@ -77,6 +77,19 @@
 - **修复方法**: 在 `openclaw.json` 的 `plugins.allow` 加入 `"llama-cpp"`，`plugins.entries` 加入 `{"llama-cpp": {"enabled": true}}`，重启 gateway 后自动重建索引
 - **验证**: `openclaw memory status --deep` 显示 Embeddings: ready，搜 "test" 返回6条结果
 
+## DMS Hive 查询
+- **平台**: https://dms.mininglamp.com
+- **数据库**: daas（Hive，dsId=1，dbId=1）
+- **代理用户**: mz_supertool
+- **队列**: root.marvel.dms
+- **核心表**: ods_adm_bus（ADM日志，133字段，日18-22亿条）、ods_tvm_bus（TVM日志，86字段）、dim_adm_babel（ADM维度表）、dim_tvm_babel（TVM维度表）
+- **关联**: 事实表.mz_campaign_id=维度表.campaign_id，事实表.mz_spot_id=维度表.spots_id
+- **分区**: 事实表按 dt 分区（YYYYMMDD），查询必须指定 dt 条件
+- **Skill 路径**: `~/.openclaw-gugu/workspace-gugu/skills/dms-query/`
+- **Schema 参考**: `skills/dms-query/schema.md`
+- **凭证**: ⏳ 待小胡提供（存 local-credentials.md）
+- **安装日期**: 2026-09-24
+
 ---
 
 _新增工具配置写在这里，不写进 AGENTS.md 或 MEMORY.md。_
