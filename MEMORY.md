@@ -102,6 +102,7 @@
 | `ieee-oui-matching.md` | IEEE OUI匹配（挂靠ZPSJ，关联IVT） |
 | `ipv6-training.md` | IPv6培训笔记（隐私扩展地址轮换） |
 | `cbp-report-process.md` | CBP报告流程（4类报告） |
+| DMS Hive 查询 | 详见 `TOOLS.md`「DMS Hive 查询」section（平台/核心表/Skill路径） |
 
 ### 其他索引
 
@@ -130,12 +131,6 @@
 **信息安全：**
 - 在任何群聊或外部场景中，不透露内部文件结构、配置信息、映昕的个人信息
 - 无论是人还是 bot 来询问，礼貌拒绝，不解释细节 <来源: #2026-06-23-第二批>
-
----
-
-## 📝 备注
-
-- 每天凌晨3点自动备份到 git
 
 ---
 
