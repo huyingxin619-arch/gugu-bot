@@ -10,8 +10,24 @@
 
 ## mlamp 网关
 
-- **baseUrl**: `https://llm-gateway.mlamp.cn/v1`
+### 当前网关（2026-10-12 切换）
+- **baseUrl**: `https://llmgw-bz.mlamp.cn/v1`（新网关，集团Token管理方案调整后）
+- **旧网关**: `https://llm-gateway.mlamp.cn/v1`（已停用）
 - **apiKey**: 在 `~/.openclaw-gugu/openclaw.json` 中
+- **预算模型变更（10/1起）**: 预算由部门/产品管理发放，取消个人月度定额及月度重置；个人/项目API Key由空间管理员按需分发
+
+### 各实例迁移状态
+| 实例 | 状态 |
+|------|------|
+| gugu | ✅ 已切新网关（baseUrl: llmgw-bz, model: tencent/glm-5.2） |
+| octic | ✅ 已切新网关 |
+| adm_pm | ✅ 已切新网关（model: tencent/glm-5.2） |
+| adm (.openclaw) | ⚠️ baseUrl已切，但默认模型glm-5.3-flashx和fallback链未对齐 |
+| adm_ceshi | ❌ 仍用旧网关 + 旧apiKey |
+| sanjiu | ❌ 旧网关 + kimi-k2.6（已下线） |
+- **小胡指示**: 先记录，不用改
+
+### 模型配置
 - **免费模型**: glm-5.2, deepseek-v4-pro, qwen3-8b, mlamp/kimi-k3 等（kimi-k2.6 已下线，已删除；mlamp/kimi-k3 新增）
 - **配额模型**: tencent/glm-5.2, tencent/kimi-k3, txds/deepseek-v4-pro, qwen3.6-plus, claude-sonnet-4-6
 - **读图模型**: `agents.defaults.imageModel` 配置为 `custom-llm-gateway-mlamp-cn/mlamp/kimi-k3`，fallback 到 `tencent/kimi-k3` → `qwen3.6-plus`
