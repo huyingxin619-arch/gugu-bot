@@ -3,7 +3,7 @@
 ## OpenClaw 配置
 
 - **配置文件**: `~/.openclaw-gugu/openclaw.json`
-- **API Key 更换**：手动改 JSON 里的 apiKey 不够，OpenClaw 有 auth profile 机制。必须用 CLI：`openclaw models auth paste-api-key --provider custom-llm-gateway-mlamp-cn`，然后粘贴新 key，会写入 `auth-profiles.json` 并同步 config（2026-08-25 踩坑）
+- **API Key 更换 SOP**：必须用 CLI `openclaw models auth paste-api-key --provider custom-llm-gateway-mlamp-cn`，不能手动改 JSON。根因：OpenClaw 的 API key 存在两个位置（openclaw.json provider config + per-agent SQLite auth profile store），auth profile store 优先级更高。手动改 JSON 只改了 provider config，SQLite 里的旧 key 不变，reload 后 gateway 用旧 key → 401。`paste-api-key` 会同步两边。（2026-10-12 踩坑：key 不同步导致 27 分钟全局故障）
 - **默认模型**: `custom-llm-gateway-mlamp-cn/tencent/glm-5.2`
 - **Gateway 端口**: 18790
 - **Profile**: gugu
