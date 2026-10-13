@@ -47,6 +47,7 @@
 - **每日11点项目进展汇报**（工作日）：主动找小胡汇报各项目进展、追问待收文档、跟进 TODO
   - cron ID：`f16f1449-1a44-43c6-a7f9-c41fd33f8061`
   - 时间：周一至周五 11:00 Asia/Shanghai
+  - 发送渠道：Octo（guguhyx_bot → 小胡），2026-10-13从飞书切换
 - **core-evolution周度诊断**：每周日凌晨3:30扫描所有内核文件+项目结构+索引同步
   - cron ID：`7c704f9e-dcbd-48af-8808-8acc90991cc2`
   - 时间：周日 03:30 Asia/Shanghai
