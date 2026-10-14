@@ -10,7 +10,10 @@
 - 先请求 Admonitor API Token，不能跳过
 - Token 有效期注意，过期要重新获取
 
-### Step 2：与小胡确认拉数参数
+### Step 2：查活动周期 + 与小胡确认拉数参数
+
+**先调 `GET /cms/v1/campaigns/show?campaign_id=XXX` 确认活动周期（start_date ~ end_date）**，确保date参数落在周期内。API不支持查活动周期外的数据，会报 `the date is out of campaign period`。
+
 在实际拉数前，**必须逐项确认以下内容**：
 
 | 参数 | 说明 |
