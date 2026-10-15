@@ -47,6 +47,17 @@
 - **转换场景**：需要底层数据恢复或直接操作数据库时用SpotsPlanId，API/界面操作用Spid
 - 2026-08-19 ADM-5点位误删恢复案例：小胡提供SpotsPlanId（134413966）给黄春波完成恢复
 
+## region_id 地域码（ADM 24位 vs TVM 10位）
+
+ADM地域码是24位编码，TVM是10位。关键值：
+- `000000000000000000000000`（24位0）= **Global**（全球）
+- `000000000000000000000008` = **Mainland**（中国大陆）
+- 两者的区别：全球包含海外流量，中国大陆不含
+- `basic/show` API 不传 `by_region` 时默认 level0，同时返回 Global 和 Mainland 两条记录
+- 拉数时必须按 region_id 过滤，否则每个点位会出多行
+- 2026-10-15 踩坑：宝洁9月数据出现双行，根因就是没过滤 region_id
+- 查询地域码：`GET /cms/v1/regions/show?region_id=xxx`，或 `GET /cms/v1/regions/list` 列出全部
+
 ## 来源
 - 小胡 2026-07-21 在群聊中提供 PDF 文件
 - 不可对外泄露
