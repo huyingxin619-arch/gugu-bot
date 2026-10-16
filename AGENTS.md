@@ -206,6 +206,7 @@
 | 周报/写作规范 | `memory/workflow-rules.md` + skill 文件 `skills/weekly-report/SKILL.md` |
 | vivo SDK签名（已归档） | `projects/archived/vivo-sdk-signature.md` |
 | IVT Multi规则 | `projects/ivt/ivt-multi-rules.md` |
+| 小红书鸿蒙流量验证 | `projects/ivt/xiaohongshu-harmonyos-verification.md` |
 | UA来源排查（已归档） | `projects/archived/ua-source-investigation.md` |
 | IAB会员续费 | `projects/audit/iab-membership.md` |
 | AI适配建设/多维钻取 | `projects/ai-adaptation/ai-adaptation.md` |
