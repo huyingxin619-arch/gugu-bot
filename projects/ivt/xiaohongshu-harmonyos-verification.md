@@ -57,3 +57,4 @@
 - [ ] 确认 speaker 映射（speaker3、speaker6）
 - [ ] 获取背景文件：illegal OS 规则具体配置、MO 字段定义、广协标准文档
 - [ ] UA 验证执行（第一步）
+- [ ] 10/19进展：龙敏华在OTCT微盘创建共享文件夹整理illegal OS相关材料；评估风险点：SFTP空间上限、每月重算spid个数及日志量对计算时间的影响
