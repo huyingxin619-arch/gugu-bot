@@ -194,6 +194,7 @@
 | 智屏视界/ZPSJ/视频像素/IEEE匹配 | `projects/zpsj/zpsj-video-verification.md` |
 | 蚂蚁IVT（已归档） | `projects/archived/ant-ivt-research.md` |
 | ADM看板/Bot（已归档） | `projects/archived/admonitor-bot-dashboard.md` |
+| 鸿蒙UA解析改造/AdMonitor鸿蒙 | `projects/adm-harmony-ua.md` |
 | OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
 | CBP升级 | `projects/ivt/cbp-upgrade.md` |
 | 布点/计算链路 | `projects/admonitor-budian.md` |
