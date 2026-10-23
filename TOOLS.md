@@ -49,7 +49,7 @@
 
 ## octo-daemon
 
-- **版本**: v1.1.0 (darwin-arm64)
+- **octo-daemon**: v1.2.3 (darwin-arm64)（10/21从v1.1.0升级，CLI同步升至0.19.0）
 - **用途**: 让专家通过 octo-daemon 调用 openclaw CLI，实现 Loop 子系统操作
 - **Profile**: `gugu`（与默认 profile 隔离，因默认端口 19514 被 huangchunbo 的 multica daemon 占用）
 - **启动**: `octo-daemon --profile gugu`，独立端口
