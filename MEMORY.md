@@ -64,7 +64,7 @@
 
 ## 🔧 octo-daemon & octo-cli
 
-- octo-daemon v1.1.0，profile=gugu，独立端口（默认端口被 multica daemon 占用）
+- octo-daemon v1.2.3（10/21升级），profile=gugu，独立端口（默认端口被 multica daemon 占用）
 - octo-cli 可读 Octo 在线文档：`octo-cli docs content get <docId> --bot-id guguhyx_bot`
 - octo-cli 可导出 markdown：`octo-cli docs export <docId> --export-format md -o <path>`
 - 权限由文档创建者通过 `octo-cli docs forward-grant` 授予
