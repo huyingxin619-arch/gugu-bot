@@ -37,7 +37,6 @@
 
 - **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
 - **adm 核心能力：** 按指令通过 API 拉取广告监测数据
-- **常见问题：** MLAMP token 配额不足导致 403 报错（已记录根因）<来源: #2026-06-25>
 - **adm 备份：** 每天 2:00 scripts/backup.sh，1:55 落盘兜底（与 gugu 3:00 备份时间错开）<来源: #2026-08-12>
 
 ---
@@ -84,7 +83,7 @@
 | `projects/ai-adaptation/` | AI适配建设（含多维钻取、API测试修复、看板） |
 | `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则） |
 | `projects/audit/` | 审计/合规（IAB会员续费） |
-| `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计/ADM龙虾看板/达能/UA来源排查/vivo SDK签名） |
+| `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计/ADM龙虾看板/达能/UA来源排查/vivo SDK签名/布点） |
 | `projects/` 根 | 独立项目（见 overview.md） |
 
 ### 知识库（knowledge/）

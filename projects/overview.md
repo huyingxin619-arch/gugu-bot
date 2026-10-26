@@ -41,9 +41,9 @@
 - **核心进展：** VIVO媒体要求SDK上报数据增加签名校验，8/1上线，占比>98%，签名校验<1%；安卓17版本9/10发版→灰度一周→9/22三方联调；OPPO 9/12三方联调验证
 - **详情：** `projects/archived/vivo-sdk-signature.md`
 
-### 5. 布点项目
+### 5. 布点项目（已归档）
 - **负责人：** 小胡
-- **当前状态：** ✅ **已收尾（待适配）** — 核心功能已上线，DOT覆盖bug已修复。剩余2个适配项（DOT活动标识+IVT无效ID置0）需等多维API完成后排期，ADM任务归档功能失败待排查，均已记入待办不阻塞
+- **当前状态：** ✅ **已归档** — 核心功能已上线，DOT覆盖bug已修复。剩余2个适配项（DOT活动标识+IVT无效ID置0）需等多维API完成后排期，ADM任务归档功能失败待排查，均已记入待办不阻塞
 - **核心进展：**
   - TVM批量导入模版下拉框错位✅、自定义任务计算失败✅、布点活动点位plan为空DR计算bug✅ 均已修复
   - ✅ **DOT覆盖bug已修复**（9/3发现，影响约200+BB活动，技术侧已修复并上线）
@@ -51,7 +51,7 @@
   - DOT活动适配：DOT下发排期的活动需加"按布点计算"标识，走布点过滤逻辑
   - IVT无效ID规则适配：非布点日期无效ID会出现负数，需置0
   - 两个适配项在排期中，需等多维API开发完成
-- **详情：** `projects/admonitor-budian.md`
+- **详情：** `projects/archived/admonitor-budian.md`
 
 ---
 
@@ -376,7 +376,7 @@
 | 2 | 蚂蚁IVT（已归档） | `projects/archived/ant-ivt-research.md` |
 | 3 | TAG审计（已归档） | `projects/archived/tag-audit.md` |
 | 4 | ADM龙虾看板（已归档） | `projects/archived/admonitor-bot-dashboard.md` |
-| 5 | 布点项目 | `projects/admonitor-budian.md` |
+| 5 | 布点项目（已归档） | `projects/archived/admonitor-budian.md` |
 | 6 | AI适配建设（主线） | `projects/ai-adaptation/ai-adaptation.md` |
 | 6a | └ 多维钻取API | `projects/ai-adaptation/adm-drill/`（adm-drill-api.md + adm-drill-api-prd.md） |
 | 6b | └ API测试修复 | `projects/ai-adaptation/admonitor-api-test-fixes.md` |

@@ -197,7 +197,7 @@
 | 鸿蒙UA解析改造/AdMonitor鸿蒙 | `projects/adm-harmony-ua.md` |
 | OTT实验室 | `projects/ivt/ott-lab-upgrade.md` |
 | CBP升级 | `projects/ivt/cbp-upgrade.md` |
-| 布点/计算链路 | `projects/admonitor-budian.md` |
+| 布点/计算链路（已归档） | `projects/archived/admonitor-budian.md` |
 | 三九Agent | `projects/sanjiuagent.md` |
 | TAG审计（已归档） | `projects/archived/tag-audit.md` |
 | 红果短剧/三九数据差异 | `projects/sanjiu-honggu-data-discrepancy.md` |
