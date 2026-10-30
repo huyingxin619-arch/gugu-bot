@@ -74,6 +74,34 @@
 - 权限: 需文档创建者通过 `octo-cli docs forward-grant` 授 reader/writer
 - guguhyx_bot 的 auth profile 已建好（`octo-cli auth login`）
 
+## octo-cli 群/Thread 定位与发消息
+
+**定位方法（不知道群/ thread id 时按此查）：**
+1. `octo-cli group list --bot-id guguhyx_bot` — 列出 bot 加入的所有群（含 group_no）
+2. `octo-cli thread list <group_no> --bot-id guguhyx_bot` — 列出群内所有 thread（含 channel_id、short_id、成员数）
+
+**已知常用定位：**
+
+| 群 | group_no | Thread | thread channel_id |
+|---|----------|--------|-------------------|
+| adm7.0 | `658b7026d7f1492aa6c76541ebbd4e6c` | adm context | `658b7026d7f1492aa6c76541ebbd4e6c____2087106383030784000` |
+| adm7.0 | 同上 | adm bot纠偏 | `658b7026d7f1492aa6c76541ebbd4e6c____2089994969916903424` |
+
+**发消息：**
+```bash
+octo-cli message send \
+  --channel-id "<thread channel_id>" \
+  --channel-type 5 \
+  --bot-id guguhyx_bot \
+  --data @payload.json
+# payload.json: {"channel_id":"...","channel_type":5,"payload":{"type":1,"content":"正文"}}
+# type: 1=文本 2=图片 8=文件；channel_type: 1=DM 2=group 5=thread
+```
+
+- 长文先用 python 生成 payload JSON 文件再 `--data @file` 传，避免 shell 转义问题
+- 发送前 `--dry-run` 验证格式
+- 踩坑（2026-10-30）：被问到“发到群的 thread”时第一反应是“我不知道”，实际应该先 `group list` 查自己加了哪些群——先查再说不知道
+
 ## Node.js 版本
 
 - **当前版本**: v24.19.0（通过 nvm 安装）
