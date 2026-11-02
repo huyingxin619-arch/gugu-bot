@@ -4,7 +4,7 @@
 
 - **配置文件**: `~/.openclaw-gugu/openclaw.json`
 - **API Key 更换 SOP**：必须用 CLI `openclaw models auth paste-api-key --provider custom-llm-gateway-mlamp-cn`，不能手动改 JSON。根因：OpenClaw 的 API key 存在两个位置（openclaw.json provider config + per-agent SQLite auth profile store），auth profile store 优先级更高。手动改 JSON 只改了 provider config，SQLite 里的旧 key 不变，reload 后 gateway 用旧 key → 401。`paste-api-key` 会同步两边。（2026-10-12 踩坑：key 不同步导致 27 分钟全局故障）
-- **默认模型**: `custom-llm-gateway-mlamp-cn/tencent/glm-5.2`
+- **默认模型**: `custom-llm-gateway-mlamp-cn/mlamp/kimi-k3-pro`（2026-11-02 确认）
 - **Gateway 端口**: 18790
 - **Profile**: gugu
 
@@ -19,12 +19,12 @@
 ### 各实例迁移状态
 | 实例 | 状态 |
 |------|------|
-| gugu | ✅ 已切新网关（baseUrl: llmgw-bz, model: tencent/glm-5.2） |
+| gugu | ✅ 已切新网关（baseUrl: llmgw-bz, model: mlamp/kimi-k3-pro, fallbacks: glm-5.3→kimi-k3→glm-5.2） |
 | octic | ✅ 已切新网关 |
 | adm_pm | ✅ 已切新网关（model: tencent/glm-5.2） |
-| adm (.openclaw) | ⚠️ baseUrl已切，但默认模型glm-5.3-flashx和fallback链未对齐 |
-| adm_ceshi | ❌ 仍用旧网关 + 旧apiKey |
-| sanjiu | ❌ 旧网关 + kimi-k2.6（已下线） |
+| adm (.openclaw) | ⚠️ baseUrl已切，但默认模型glm-5.3-flashx和fallback链未对齐（2026-10-12 最后确认，待更新） |
+| adm_ceshi | ❌ 仍用旧网关 + 旧apiKey（2026-10-12 最后确认，待更新） |
+| sanjiu | ❌ 旧网关 + kimi-k2.6（已下线）（2026-10-12 最后确认，待更新） |
 - **小胡指示**: 先记录，不用改
 
 ### 模型配置
@@ -38,7 +38,7 @@
 - **仓库**: `https://github.com/huyingxin619-arch/gugu-bot.git`
 - **频率**: 每天凌晨 3:00
 - **cron ID**: `9716d362-3dfd-4217-8379-2cd0b22c98f5`
-- **model**: `custom-llm-gateway-mlamp-cn/tencent/glm-5.2`（必须与飞书 live session 当前 model 一致，否则 job 会报 `Live session model switch requested` 错误）
+- **model**: `custom-llm-gateway-mlamp-cn/mlamp/kimi-k3-pro`（必须与当前 session model 一致，否则 job 会报 `Live session model switch requested` 错误；2026-11-02 同步更新）
 - **踩坑**: 2026-08-01，飞书 session 手动从 kimi-k2.6 切到 glm-5.2 后，备份 job payload 仍指定 kimi-k2.6 导致冲突失败。修复：job model 同步改为 glm-5.2
 - **踩坑**: 2026-08-06，cron job model ID 需跟随网关格式变更同步。原 memory-distill job 用旧模型ID `mlamp/kimi-k2.6`（已不可用），连续4天 503 失败（"无可用渠道"）。修复：model 改为 `tencent/glm-5.2`。教训：mlamp 网关模型ID格式变更后，所有 cron job 的 model 需同步检查更新
 

@@ -221,3 +221,8 @@
 | CBP报告流程 | `knowledge/cbp-report-process.md` |
 | DMS/Hive查询 | `skills/dms-query/SKILL.md` |
 | OKR/OKR撰写 | `skills/okr-cowriter/SKILL.md` |
+| CSA/年度披露/客户成功审计 | `projects/csa-audit.md` |
+| 风行重跑数 | `projects/overview.md`（暂无独立文件） |
+| DataHub/字节方案 | `projects/overview.md`（暂无独立文件） |
+| B站独占用户验证 | `projects/overview.md`（暂无独立文件） |
+| 海外收数方案 | `projects/overview.md`（暂无独立文件） |

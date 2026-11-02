@@ -32,7 +32,7 @@
 
 | 实例 | 端口 | HOME 目录 | 用途 | 默认模型 |
 |------|------|-----------|------|----------|
-| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理（项目追踪/策略分析/文档管理/跨bot协调）| glm-5.2 |
+| **gugu**（本实例）| 18790 | `~/.openclaw-gugu` | 小胡的个人工作助理（项目追踪/策略分析/文档管理/跨bot协调）| mlamp/kimi-k3-pro |
 | **adm** | 18789 | `~/.openclaw` | AdMonitor 数据执行助手（数据执行/API拉数/全量ADM知识）| tencent/glm-5.2 |
 
 - **adm 实例负责人：** AdMonitor 助手（AI 数据执行助手）
@@ -103,13 +103,13 @@
 | `ieee-oui-matching.md` | IEEE OUI匹配（挂靠ZPSJ，关联IVT） |
 | `ipv6-training.md` | IPv6培训笔记（隐私扩展地址轮换） |
 | `cbp-report-process.md` | CBP报告流程（4类报告） |
+| `miaozhen-products.md` | 秒针产品图谱 |
+| `openclaw-api-key-replacement-sop.md` | OpenClaw API Key 更换 SOP |
 | DMS Hive 查询 | 详见 `TOOLS.md`「DMS Hive 查询」section（平台/核心表/Skill路径） |
 
-### 其他索引
+### 外部引用
 
-- **秒针产品图谱** → `knowledge/miaozhen-products.md`
 - **AdMonitor 背景知识** → 飞书文档 `EuQedl4rBo0uE3x0OowcpXaynTc`
-- **OpenClaw API Key 更换 SOP** → `knowledge/openclaw-api-key-replacement-sop.md`
 
 ### memory/ 分工文件
 
