@@ -226,3 +226,4 @@
 | DataHub/字节方案 | `projects/overview.md`（暂无独立文件） |
 | B站独占用户验证 | `projects/overview.md`（暂无独立文件） |
 | 海外收数方案 | `projects/overview.md`（暂无独立文件） |
+| 快手同源机房 | `projects/kuaishou-tongyuan.md` |
