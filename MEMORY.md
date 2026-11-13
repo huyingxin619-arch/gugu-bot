@@ -87,6 +87,7 @@
 | `projects/ivt/` | IVT全家桶（Prebid/CBP/OTT实验室/Multi规则） |
 | `projects/audit/` | 审计/合规（IAB会员续费） |
 | `projects/csa-audit.md` | **CSA年度披露材料/客户成功审计**（内部文档评审+客户侧评审，="年度披露材料评审会"） |
+| `projects/apple-renewal-ivt-eval.md` | **苹果续约IVT评估表**（跟尼尔森横向竞标，进行中） |
 | `projects/kuaishou-tongyuan.md` | **快手同源机房**（丢数结算事件处理中，含服务器资产/合同风险/技术架构/两场会记录） |
 | `projects/archived/` | 已归档项目（KA品牌安全/蚂蚁IVT/TAG审计/ADM龙虾看板/达能/UA来源排查/vivo SDK签名/布点） |
 | `projects/` 根 | 独立项目（见 overview.md） |
