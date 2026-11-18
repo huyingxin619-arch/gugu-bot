@@ -134,6 +134,12 @@ octo-cli message send \
 - **凭证**: ⏳ 待小胡提供（存 local-credentials.md）
 - **安装日期**: 2026-09-24
 
+## cron job session 膨胀问题
+
+- **踩坑**：2026-11-18，每日11点项目进展汇报 cron job 报 "Agent couldn't generate a response"。根因：job 挂在飞书私聊 session 上，历史 context 累积膨胀（312K input tokens），glm-5.2 不可用 fallback 到 glm-5.3 跑了 21 分钟仍无法解析出有效回复。error 是 agent 层面的不是 API 错误，所以不继续 fallback
+- **修复**：sessionTarget 从飞书私聊 session 改成 `isolated`，每次跑都是全新 session
+- **教训**：报告/汇报类 cron job 应使用 `isolated` sessionTarget，避免历史 context 膨胀导致 agent 无法生成回复
+
 ---
 
 _新增工具配置写在这里，不写进 AGENTS.md 或 MEMORY.md。_
