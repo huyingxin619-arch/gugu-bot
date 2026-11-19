@@ -62,6 +62,35 @@ After displaying results, ask the user if they need:
 - Maximum poll time: 10 minutes (60 polls x 10s interval)
 - Results are capped at 500 rows per page; for larger results, note this limitation to the user
 
+## 实战踩坑经验（2026-11-19 大表 join 场景）
+
+### 问题1：大表 join + GROUP BY 导致 Reducer 长尾严重倾斜
+- **场景**：事实表（ods_adm_bus，日18-22亿条）join 维度表（dim_adm_babel）按 dt 分组统计
+- **现象**：1024 reducer 卡在 99%，30+ 分钟不出结果，连续两个 queryHistId 都卡死
+- **根因**：按 dt 分组时，某些 dt 的数据量远超其他，导致 reducer 分配极度不均
+
+### 问题2：DMS 平台 Hive 参数不生效
+- **现象**：submit 时传 `hive.exec.reducers.max=60` 等参数，queryStatus.settings 里只剩 `mapreduce.job.queuename`，其他参数全被平台吞掉
+- **影响**：无法通过调参数优化查询性能
+- **应对**：在 SQL 层面优化（如切片、避免复杂 join），不依赖平台参数
+
+### 问题3：DMS 并发上限 6 条/账号
+- **现象**：submit 返回"同时执行任务过多, 当前查询量：6条，最大执行量：6条"
+- **影响**：老任务占坑不释放时，新任务无法提交
+- **限制**：无 cancel 接口（`/hive-query/cancel-query` 和 `/stop` 都 404）
+- **应对**：控制并发提交节奏，避免一次性提交过多任务
+
+### 有效打法：维度表先取 ID → 事实表按时间切片直查
+1. 先从维度表拉出目标 spots_id 列表（如 `SELECT spots_id FROM dim_adm_babel WHERE advertiser_name = 'KA-慎用' AND media_name LIKE '%哔哩哔哩%'`）
+2. 将时间范围按 5 天切片，每个切片独立提交查询
+3. 事实表查询用 `WHERE mz_spot_id IN (...) AND dt BETWEEN ... AND ...`，不做 join
+4. 只做 `COUNT(*)` 或简单聚合，不做 `COUNT(DISTINCT ...)`
+5. 6 切片并发提交，单片 112-268 秒完成
+
+### 其他注意事项
+- `is_homologous` 字段在 ods_adm_bus 中标记是否同源服务器流量（1=同源）
+- 维度表 media_name 字段对同一媒体可能有多种写法（如"哔哩哔哩/B站/bilibili/Bili"），查询时需用 LIKE 匹配多种
+
 ## Table schema reference
 
 **IMPORTANT**: Before writing any SQL, you MUST read the full table schema file to understand available fields, types, and join relationships:
